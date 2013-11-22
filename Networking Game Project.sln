@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual C# Express 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game_Server", "Game_Server\Game_Server.csproj", "{F215FB45-AFB5-432C-85D1-6DCF88D66F00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game_Client", "Game_Client\Game_Client.csproj", "{429DE331-828A-4010-806D-5B1A4FB168BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F215FB45-AFB5-432C-85D1-6DCF88D66F00}.Debug|x86.ActiveCfg = Debug|x86
+		{F215FB45-AFB5-432C-85D1-6DCF88D66F00}.Debug|x86.Build.0 = Debug|x86
+		{F215FB45-AFB5-432C-85D1-6DCF88D66F00}.Release|x86.ActiveCfg = Release|x86
+		{F215FB45-AFB5-432C-85D1-6DCF88D66F00}.Release|x86.Build.0 = Release|x86
+		{429DE331-828A-4010-806D-5B1A4FB168BE}.Debug|x86.ActiveCfg = Debug|x86
+		{429DE331-828A-4010-806D-5B1A4FB168BE}.Debug|x86.Build.0 = Debug|x86
+		{429DE331-828A-4010-806D-5B1A4FB168BE}.Release|x86.ActiveCfg = Release|x86
+		{429DE331-828A-4010-806D-5B1A4FB168BE}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
