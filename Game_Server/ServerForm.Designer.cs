@@ -46,6 +46,7 @@
             this.clientListTxt.ReadOnly = true;
             this.clientListTxt.Size = new System.Drawing.Size(121, 188);
             this.clientListTxt.TabIndex = 0;
+            this.clientListTxt.TextChanged += new System.EventHandler(this.clientListTxt_TextChanged);
             // 
             // startSrvBtn
             // 
@@ -116,7 +117,7 @@
             this.sndBtn.UseVisualStyleBackColor = true;
             this.sndBtn.Click += new System.EventHandler(this.sndBtn_Click);
             // 
-            // serverForm
+            // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -129,7 +130,7 @@
             this.Controls.Add(this.stopSrvBtn);
             this.Controls.Add(this.startSrvBtn);
             this.Controls.Add(this.clientListTxt);
-            this.Name = "serverForm";
+            this.Name = "ServerForm";
             this.Text = "Networking Game Server";
             this.ResumeLayout(false);
             this.PerformLayout();

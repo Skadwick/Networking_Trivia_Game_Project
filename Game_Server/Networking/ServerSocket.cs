@@ -204,7 +204,7 @@ namespace Game_Server.Networking
                 }
                 else
                 {
-                    serverGUI.Invoke(serverGUI.updateTextBox, "A client has disconnected");
+                    serverGUI.Invoke(serverGUI.updateTextBox, "A client has disconnected.");
                 }
                 return;
             }

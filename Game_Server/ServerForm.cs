@@ -35,8 +35,6 @@ namespace Game_Server
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
         }
 
-
-
         /*
          * Start server button
          */
@@ -50,9 +48,6 @@ namespace Game_Server
             serverSock.Accept();
             updateChatWin("Waiting for connections...");
         }
-
-
-
         /*
          * Stop server button
          */
@@ -62,26 +57,34 @@ namespace Game_Server
             stopSrvBtn.Enabled = false;  
         }
 
-
-
         /*
          * Start game button
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
-
+            //wait for set number of players
         }
-
-
 
         /*
          * Send line button
          */
         private void sndBtn_Click(object sender, EventArgs e)
         {
-
+            //send broadcast to clients
         }
 
+        /*
+         * Updates the main chat/status textbox for the server form.
+         */
+        void updateChatWin(string str)
+        {
+            this.srvConslTxt.Text += ">" + str + Environment.NewLine;
+        }
+
+        private void clientListTxt_TextChanged(object sender, EventArgs e)
+        {
+            //display client list (hashTable from server)
+        }
 
 
         /*
@@ -93,14 +96,6 @@ namespace Game_Server
         }
 
 
-
-        /*
-         * Updates the main chat/status textbox for the server form.
-         */
-        void updateChatWin(string str)
-        {
-            this.srvConslTxt.Text += ">" + str + Environment.NewLine;
-        } 
 
     }
 }

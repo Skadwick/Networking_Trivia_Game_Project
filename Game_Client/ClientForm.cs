@@ -28,15 +28,37 @@ namespace Game_Client
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
         }
 
+        private void usrNmTxt_TextChanged(object sender, EventArgs e)
+        {
+            //fade when connected
+        }
+
+        private void portTxt_TextChanged(object sender, EventArgs e)
+        {   
+            //fade when connected
+        }
+
+        private void ipAddrTxt_TextChanged(object sender, EventArgs e)
+        {
+            //fade when connected
+        }
 
         /*
          * Connect to server button
          */
         private void connBtn_Click(object sender, EventArgs e)
         {
-            clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
+            if (ipAddrTxt.Text == "" || portTxt.Text == "")
+                MessageBox.Show("Please enter Server IP address and or Port Number. ");
+            else if (usrNmTxt.Text == "")
+                MessageBox.Show("Please enter a User Name. ");
+            else
+            {
+                clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
+                String clientName = usrNmTxt.Text;
+            }
+            //fade when connected
         }
-
 
         /*
          * Submit answer button
@@ -44,26 +66,21 @@ namespace Game_Client
         private void sbmtBtn_Click(object sender, EventArgs e)
         {
 
+            this.timer1.Start();
         }
 
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            this.timePrgBar.Increment(1);
+        }
 
         /*
          * Disconnect from server button
          */
         private void disconnbtn_Click(object sender, EventArgs e)
         {
-
-        }
-
-
-        /*
-         * Exit button
-         */
-        private void extBtn_Click(object sender, EventArgs e)
-        {
             this.Close();
         }
-
 
         /*
          * Updates the main chat/status textbox for the client form.
@@ -73,5 +90,6 @@ namespace Game_Client
             this.clnConslTxt.Text += "> " + msg + Environment.NewLine;
         }
 
+        
     }
 }
