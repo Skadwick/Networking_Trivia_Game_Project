@@ -37,8 +37,6 @@ namespace Game_Server.Networking
             listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
 
-
-
         /*
          * Bind the listener socket to any ip address associated with the computer running 
          * the server, and the port which is passed as a parameter from the calling class.
@@ -58,8 +56,6 @@ namespace Game_Server.Networking
                 serverGUI.Invoke(serverGUI.updateTextBox, "Error Binding socket!");
             }
         }
-
-
 
         /*
          * Listen for incoming connections trying to connect to the socket.
@@ -81,8 +77,6 @@ namespace Game_Server.Networking
             }
         }
 
-
-
         /*
          * Sets a reference to the calling form.  This reference is used to access a
          * delegate invoke() method so that we can update fields in the form class.
@@ -97,8 +91,6 @@ namespace Game_Server.Networking
         {
             serverGUI = sf;
         }
-
-
 
         /*
          * Begin listening for connections asynchronously.  
@@ -120,8 +112,6 @@ namespace Game_Server.Networking
             }
         }
 
-
-
         /*
          * Send data to a client.
          * 
@@ -142,8 +132,6 @@ namespace Game_Server.Networking
                 serverGUI.Invoke(serverGUI.updateTextBox, "Failed to send message.");
             }
         }
-
-
 
         /*
          * Setup of the client handler socket.  
@@ -173,8 +161,6 @@ namespace Game_Server.Networking
             }
             Accept();
         }
-
-
 
         /*
          * Handle data received from a client.  
@@ -214,22 +200,29 @@ namespace Game_Server.Networking
             {
                 clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
             }
-
         }
 
-
-
         /*
+         * Handle send data to a client.  
          * 
+         * This method is triggered by an IAsync event sent from the BeginSend() method.  
+         * When this method is called, sending data to the client that triggered 
+         * the event is temporarily blocked, but resumes once the server is done
+         * working with the data.
          */
         private void SendCallback(IAsyncResult result)
         {
+            try
+            {
+                Socket client = result.AsyncState as Socket;
 
-            Socket client = result.AsyncState as Socket;
-
-            // Complete sending the data to the remote device.
-            int bytesSent = client.EndSend(result);
-            //serverGUI.Invoke(serverGUI.updateTextBox, "Sent message to client");
+                // Complete sending the data to the remote device.
+                int bytesSent = client.EndSend(result);
+                //serverGUI.Invoke(serverGUI.updateTextBox, "Sent message to client");
+            
+            }catch (Exception e) {
+                serverGUI.Invoke(serverGUI.updateTextBox, e.ToString());
+            }
         }
 
 

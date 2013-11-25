@@ -44,8 +44,6 @@ namespace Game_Client.Networking
             clientGUI = frm;
         }
 
-
-
         /*
          * Attempts to connect to the server.
          * 
@@ -67,8 +65,6 @@ namespace Game_Client.Networking
             }
         }
 
-
-
         /*
          * Send data to the server.
          * 
@@ -86,8 +82,6 @@ namespace Game_Client.Networking
                 clientGUI.Invoke(clientGUI.updateTextBox, "Failed to send message.");
             }
         }
-
-
 
         /*
          * Finish the connection to the server.
@@ -111,8 +105,6 @@ namespace Game_Client.Networking
                 return;
             }
         }
-
-
 
         /*
          * Handle data received from the server.  

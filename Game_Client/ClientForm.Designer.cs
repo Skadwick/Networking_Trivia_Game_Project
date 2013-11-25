@@ -56,7 +56,6 @@
             this.ipAddrTxt.TabIndex = 0;
             this.ipAddrTxt.Text = "127.0.0.1";
             this.ipAddrTxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.ipAddrTxt.TextChanged += new System.EventHandler(this.ipAddrTxt_TextChanged);
             // 
             // portTxt
             // 
@@ -70,7 +69,6 @@
             this.portTxt.TabIndex = 1;
             this.portTxt.Text = "25001";
             this.portTxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.portTxt.TextChanged += new System.EventHandler(this.portTxt_TextChanged);
             // 
             // usrNmTxt
             // 
@@ -83,7 +81,6 @@
             this.usrNmTxt.Size = new System.Drawing.Size(116, 25);
             this.usrNmTxt.TabIndex = 2;
             this.usrNmTxt.Text = "Username";
-            this.usrNmTxt.TextChanged += new System.EventHandler(this.usrNmTxt_TextChanged);
             // 
             // connBtn
             // 
@@ -228,6 +225,8 @@
             this.Controls.Add(this.portTxt);
             this.Controls.Add(this.ipAddrTxt);
             this.DoubleBuffered = true;
+            this.MaximumSize = new System.Drawing.Size(802, 519);
+            this.MinimumSize = new System.Drawing.Size(802, 519);
             this.Name = "ClientForm";
             this.Text = "Networking Game Client";
             this.ResumeLayout(false);

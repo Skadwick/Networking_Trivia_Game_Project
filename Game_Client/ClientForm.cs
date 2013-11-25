@@ -28,21 +28,6 @@ namespace Game_Client
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
         }
 
-        private void usrNmTxt_TextChanged(object sender, EventArgs e)
-        {
-            //fade when connected
-        }
-
-        private void portTxt_TextChanged(object sender, EventArgs e)
-        {   
-            //fade when connected
-        }
-
-        private void ipAddrTxt_TextChanged(object sender, EventArgs e)
-        {
-            //fade when connected
-        }
-
         /*
          * Connect to server button
          */
@@ -57,7 +42,6 @@ namespace Game_Client
                 clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
                 String clientName = usrNmTxt.Text;
             }
-            //fade when connected
         }
 
         /*
@@ -65,7 +49,7 @@ namespace Game_Client
          */
         private void sbmtBtn_Click(object sender, EventArgs e)
         {
-
+            //if time runs out null should be submitted
             this.timer1.Start();
         }
 
