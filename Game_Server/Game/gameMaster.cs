@@ -298,22 +298,22 @@ namespace TriviaGameMaster
                         break;
                 }
                 
-                newQuestion(question);
-                newAnswers(answers);
-                newCorrectAnswer(correctAnswer);
+                newQuestionMethod(question);
+                newAnswersMethod(answers);
+                newCorrectAnswerMethod(correctAnswer);
         }
-        
-        public static void newQuestion(string ques)
+
+        public static void newQuestionMethod(string ques)
         {
             newQuestion = ques;
         }
-        
-        public static void newAnswers(string ans)
+
+        public static void newAnswersMethod(string ans)
         {
             updatedAnswers = ans;
         }
 
-        public static void newCorrectAnswers(string corAns)
+        public static void newCorrectAnswerMethod(string corAns)
         {
             updatedCorrectAnswer = corAns;
         }
