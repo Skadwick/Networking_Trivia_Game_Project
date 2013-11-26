@@ -13,6 +13,7 @@ namespace Game_Client.Networking
         private Socket socket;
         private byte[] buffer;
         ClientForm clientGUI;
+        string username;
 
 
         /*
@@ -25,6 +26,15 @@ namespace Game_Client.Networking
         public ClientSocket()
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        }
+
+
+        /*
+         * 
+         */
+        public void setUserName(string nm)
+        {
+            username = nm;
         }
 
 
@@ -96,6 +106,7 @@ namespace Game_Client.Networking
             {
                 clientGUI.Invoke(clientGUI.updateTextBox, "Connected to server.");
                 socket.EndConnect(result);
+                send(username);
                 buffer = new byte[1024];
                 socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, null);
             }

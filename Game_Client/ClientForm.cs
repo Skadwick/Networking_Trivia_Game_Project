@@ -39,8 +39,9 @@ namespace Game_Client
                 MessageBox.Show("Please enter a User Name. ");
             else
             {
-                clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
                 String clientName = usrNmTxt.Text;
+                clientSock.setUserName(clientName);
+                clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
             }
         }
 

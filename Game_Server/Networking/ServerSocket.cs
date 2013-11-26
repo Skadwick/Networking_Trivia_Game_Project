@@ -16,6 +16,15 @@ using System.Net.Sockets;
 
 namespace Game_Server.Networking
 {
+
+    class Player
+    {
+        public int score;
+        public String userName;
+        public Socket handlerSock;
+    }
+
+
     class ServerSocket
     {
 
@@ -24,6 +33,8 @@ namespace Game_Server.Networking
         private byte[] recvBuf = new byte[1024];
 
         public ServerForm serverGUI;
+
+        private List<Player> players = new List<Player>();
 
 
         /*
@@ -36,6 +47,23 @@ namespace Game_Server.Networking
         {
             listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         }
+
+
+        /*
+         * Sets a reference to the calling form.  This reference is used to access a
+         * delegate invoke() method so that we can update fields in the form class.
+         * 
+         * For example, the following line of code calls a delegate in the form class.
+         * serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
+         * In this case, updateTextBox is a delegate which updates the main text window on
+         * the server form.  The string following the delegate call is the parameter
+         * to be passed to the method that the delegate is handleing. 
+         */
+        public void setForm(ServerForm sf)
+        {
+            serverGUI = sf;
+        }
+
 
         /*
          * Bind the listener socket to any ip address associated with the computer running 
@@ -57,6 +85,7 @@ namespace Game_Server.Networking
             }
         }
 
+
         /*
          * Listen for incoming connections trying to connect to the socket.
          * 
@@ -77,20 +106,6 @@ namespace Game_Server.Networking
             }
         }
 
-        /*
-         * Sets a reference to the calling form.  This reference is used to access a
-         * delegate invoke() method so that we can update fields in the form class.
-         * 
-         * For example, the following line of code calls a delegate in the form class.
-         * serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
-         * In this case, updateTextBox is a delegate which updates the main text window on
-         * the server form.  The string following the delegate call is the parameter
-         * to be passed to the method that the delegate is handleing. 
-         */
-        public void setForm(ServerForm sf)
-        {
-            serverGUI = sf;
-        }
 
         /*
          * Begin listening for connections asynchronously.  
@@ -111,6 +126,7 @@ namespace Game_Server.Networking
                 serverGUI.Invoke(serverGUI.updateTextBox, "Error accepting a client!");
             }
         }
+
 
         /*
          * Send data to a client.
@@ -133,6 +149,20 @@ namespace Game_Server.Networking
             }
         }
 
+
+        /*
+         * Sends the message passed as an argument to all players currently
+         * connected. 
+         */
+        public void broadCast(string msg)
+        {
+            foreach (Player p in players)
+            {
+                send(p.handlerSock, msg);
+            }
+        }
+
+
         /*
          * Setup of the client handler socket.  
          * 
@@ -149,6 +179,11 @@ namespace Game_Server.Networking
         {
             serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
             Socket clientSocket = listener.EndAccept(result);
+
+            Player newPlayer = new Player();
+            newPlayer.handlerSock = clientSocket;
+            players.Add(newPlayer);
+
             send(clientSocket, "Welcome to the server!");
             recvBuf = new byte[1024]; //clear the buffer
             if (clientSocket.Connected)
@@ -161,6 +196,7 @@ namespace Game_Server.Networking
             }
             Accept();
         }
+
 
         /*
          * Handle data received from a client.  
@@ -179,8 +215,17 @@ namespace Game_Server.Networking
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
 
-                //Code to Handle the packet
-                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet));
+                //Set the client's username
+                foreach (Player p in players)
+                {
+                    if ( p.handlerSock == clientSocket && p.userName == null )
+                    {
+                        p.userName = Encoding.UTF8.GetString(packet);
+                    }
+                }
+
+                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.");
+
             }
             catch (Exception e)
             {
@@ -201,6 +246,7 @@ namespace Game_Server.Networking
                 clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
             }
         }
+
 
         /*
          * Handle send data to a client.  
