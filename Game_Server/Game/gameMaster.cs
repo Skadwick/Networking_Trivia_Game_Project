@@ -3,20 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace TriviaGameMaster
+namespace Game_Server.Game
 {
-    class gameMaster
+    class GameMaster
     {
-        static String newQuestion = null;
-        static String updatedAnswers = null;
-        static String updatedCorrectAnswer = null;
 
-        //All Debug, delete below before use in program
-        static int points = 0;
-        static int totalPoints = points;
-        static int missed = 0;
-        //Delete above, part of debugging to console//
+        public static String newQuestion = null;
+        public static String updatedAnswers = null;
+        public static String updatedCorrectAnswer = null;
 
+        
         //used to determine game length
         static int gameRounds = 10;
 
@@ -29,339 +25,294 @@ namespace TriviaGameMaster
         //use random generator to grab a random question each time through inside questions method
         static Random rnd = new Random();
 
-        static void questions()
+        public static void questions()
         {
-                //variables to hold question, possible answers, and correct answer
-                //send question and answers to GUI for display to users, store correctAnswer for comparison with user input
-                String question = null;
-                String answers = null;
-                String correctAnswer = null;
+            //variables to hold question, possible answers, and correct answer
+            //send question and answers to GUI for display to users, store correctAnswer for comparison with user input
+            String question = null;
+            String answers = null;
+            String correctAnswer = null;
 
-                //At the beginning of each loop I need to implement an error check to ensure questions aren't repeated
+            //At the beginning of each loop I need to implement an error check to ensure questions aren't repeated
 
 
-                //get a random number for selecting a group from the switch statement
-                int rand = rnd.Next(0, numberOfQuestions);
+            //get a random number for selecting a group from the switch statement
+            int rand = rnd.Next(0, numberOfQuestions);
 
-                //check to make sure the question hasn't been visited before
-                while (boolArray[rand] == true)
-                {
-                    rand = rnd.Next(0, numberOfQuestions);
-                }
+            //check to make sure the question hasn't been visited before
+            while (boolArray[rand] == true)
+            {
+                rand = rnd.Next(0, numberOfQuestions);
+            }
 
-                boolArray[rand] = true;
+            boolArray[rand] = true;
 
-                //Questions, possible answers, and correct answer
-                //Note: I was thinking on how we wold display the possible answers, if we have 4 different checkbox's for answers I can just assign
-                //      each possible answer to those checkbox's, I have them set up all in one var for debugging in the console
-                //using switch
-                switch (rand)
-                {
-                    case 0:
-                        question = "What is the capital of the state Georgia in the United States of America?";
+            //Questions, possible answers, and correct answer
+            //Note: I was thinking on how we wold display the possible answers, if we have 4 different checkbox's for answers I can just assign
+            //      each possible answer to those checkbox's, I have them set up all in one var for debugging in the console
+            //using switch
+            switch (rand)
+            {
+                case 0:
+                    question = "What is the capital of the state Georgia in the United States of America?";
 
-                        answers = "A: Atlanta"
-                                   + "\nB: Macon"
-                                   + "\nC: Marietta"
-                                   + "\nD: Alpharetta";
+                    answers = "A: Atlanta"
+                               + Environment.NewLine + "B: Macon"
+                               + Environment.NewLine + "C: Marietta"
+                               + Environment.NewLine + "D: Alpharetta";
 
-                        correctAnswer = "A";
+                    correctAnswer = "A";
 
-                        break;
+                    break;
 
-                    case 1:
-                        question = "What is Tony the Tiger the mascot of?";
+                case 1:
+                    question = "What is Tony the Tiger the mascot of?";
 
-                        answers = "A: Cheerios"
-                                    + "\nB: Kellog's Frosted Flakes"
-                                    + "\nC: Chex"
-                                    + "\nD: Cocoa Puffs";
+                    answers = "A: Cheerios"
+                                + Environment.NewLine + "B: Kellog's Frosted Flakes"
+                                + Environment.NewLine + "C: Chex"
+                                + Environment.NewLine + "D: Cocoa Puffs";
 
-                        correctAnswer = "B";
+                    correctAnswer = "B";
 
-                        break;
+                    break;
 
-                    case 2:
-                        question = "Who was the 43rd president of the United States of America?";
+                case 2:
+                    question = "Who was the 43rd president of the United States of America?";
 
-                        answers = "A: Bill Clinton"
-                                    + "\nB: George W. Bush"
-                                    + "\nC: Gerald Ford"
-                                    + "\nD: George Washington";
+                    answers = "A: Bill Clinton"
+                                + Environment.NewLine + "B: George W. Bush"
+                                + Environment.NewLine + "C: Gerald Ford"
+                                + Environment.NewLine + "D: George Washington";
 
-                        correctAnswer = "B";
+                    correctAnswer = "B";
 
-                        break;
+                    break;
 
-                    case 3:
-                        question = "What is the length of 1 mile in meters?";
+                case 3:
+                    question = "What is the length of 1 mile in meters?";
 
-                        answers = "A: 1609"
-                                    + "\nB: 5280"
-                                    + "\nC: 2460"
-                                    + "\nD: 980";
+                    answers = "A: 1609"
+                                + Environment.NewLine + "B: 5280"
+                                + Environment.NewLine + "C: 2460"
+                                + Environment.NewLine + "D: 980";
 
-                        correctAnswer = "A";
+                    correctAnswer = "A";
 
-                        break;
+                    break;
 
-                    case 4:
-                        question = "What is the GCSU school mascot?";
+                case 4:
+                    question = "What is the GCSU school mascot?";
 
-                        answers = "A: Bulldog"
-                                    + "\nB: Eagle"
-                                    + "\nC: Bobcat"
-                                    + "\nD: Falcon";
+                    answers = "A: Bulldog"
+                                + Environment.NewLine + "B: Eagle"
+                                + Environment.NewLine + "C: Bobcat"
+                                + Environment.NewLine + "D: Falcon";
 
-                        correctAnswer = "C";
+                    correctAnswer = "C";
 
-                        break;
+                    break;
 
-                    case 5:
-                        question = "What is the web-related nickname given to the first Monday after Thanksgiving?";
+                case 5:
+                    question = "What is the web-related nickname given to the first Monday after Thanksgiving?";
 
-                        answers = "A: Cyber Monday"
-                                    + "\nB: Programming Monday"
-                                    + "\nC: compday"
-                                    + "\nD: Christmas Day";
+                    answers = "A: Cyber Monday"
+                                + Environment.NewLine + "B: Programming Monday"
+                                + Environment.NewLine + "C: compday"
+                                + Environment.NewLine + "D: Christmas Day";
 
-                        correctAnswer = "A";
+                    correctAnswer = "A";
 
-                        break;
+                    break;
 
-                    case 6:
-                        question = "Halloween is short for All Hallows' Eve as it's the night before what holiday once called All Hallows' Day?";
+                case 6:
+                    question = "Halloween is short for All Hallows' Eve as it's the night before what holiday once called All Hallows' Day?";
 
-                        answers = "A: Memorial Day"
-                                + "\nB: Saint Hallowed Day"
-                                + "\nC: Goblin's Day"
-                                + "\nD: All Saints Day";
+                    answers = "A: Memorial Day"
+                            + Environment.NewLine + "B: Saint Hallowed Day"
+                            + Environment.NewLine + "C: Goblin's Day"
+                            + Environment.NewLine + "D: All Saints Day";
 
-                        correctAnswer = "D";
+                    correctAnswer = "D";
 
-                        break;
+                    break;
 
-                    case 7:
-                        question = "What is the first astrological sign in the Zodiac?";
+                case 7:
+                    question = "What is the first astrological sign in the Zodiac?";
 
-                        answers = "A: Gemini"
-                                + "\nB: Leo"
-                                + "\nC: Aries"
-                                + "\nD: Cancer";
+                    answers = "A: Gemini"
+                            + Environment.NewLine + "B: Leo"
+                            + Environment.NewLine + "C: Aries"
+                            + Environment.NewLine + "D: Cancer";
 
-                        correctAnswer = "C";
+                    correctAnswer = "C";
 
-                        break;
+                    break;
 
-                    case 8:
-                        question = "Which sign falls between May 21 and June 20 on the Tropical Zodiac?";
+                case 8:
+                    question = "Which sign falls between May 21 and June 20 on the Tropical Zodiac?";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + Environment.NewLine + "B: Gemini"
+                            + Environment.NewLine + "C: Leo"
+                            + Environment.NewLine + "D: Cancer";
 
-                        correctAnswer = "B";
+                    correctAnswer = "B";
 
-                        break;
+                    break;
 
-                    case 9:
-                        question = "Who was the primary developer in the popular FPS Call Of Duty Ghosts? ";
+                case 9:
+                    question = "Who was the primary developer in the popular FPS Call Of Duty Ghosts? ";
 
-                        answers = "A: SledgeHammer Games"
-                                + "\nB: Rebellion Developments"
-                                + "\nC: Infinity Ward"
-                                + "\nD: Activision";
+                    answers = "A: SledgeHammer Games"
+                            + Environment.NewLine + "B: Rebellion Developments"
+                            + Environment.NewLine + "C: Infinity Ward"
+                            + Environment.NewLine + "D: Activision";
 
-                        correctAnswer = "C";
+                    correctAnswer = "C";
 
-                        break;
+                    break;
 
-                    case 10:
-                        question = "This show holds the record for longest-running American live-action science fiction TV series.";
+                case 10:
+                    question = "This show holds the record for longest-running American live-action science fiction TV series.";
 
-                        answers = "A: Doctor Who"
-                                + "\nB: Lost"
-                                + "\nC: Being Human"
-                                + "\nD: Stargate SG-1";
+                    answers = "A: Doctor Who"
+                            + Environment.NewLine + "B: Lost"
+                            + Environment.NewLine + "C: Being Human"
+                            + Environment.NewLine + "D: Stargate SG-1";
 
-                        correctAnswer = "D";
+                    correctAnswer = "D";
 
-                        break;
+                    break;
 
-                    case 11:
-                        question = "What show features a serial killer working as a blood spatter analyst for a police department?";
+                case 11:
+                    question = "What show features a serial killer working as a blood spatter analyst for a police department?";
 
-                        answers = "A: Revelations"
-                                + "\nB: Magnum PI"
-                                + "\nC: Dexter"
-                                + "\nD: Red River Run";
+                    answers = "A: Revelations"
+                            + Environment.NewLine + "B: Magnum PI"
+                            + Environment.NewLine + "C: Dexter"
+                            + Environment.NewLine + "D: Red River Run";
 
-                        correctAnswer = "C";
+                    correctAnswer = "C";
 
-                        break;
+                    break;
 
-                    case 12:
-                        question = "";
+                case 12:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + Environment.NewLine + "B: Gemini"
+                            + Environment.NewLine + "C: Leo"
+                            + Environment.NewLine + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 13:
-                        question = "";
+                case 13:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 14:
-                        question = "";
+                case 14:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 15:
-                        question = "";
+                case 15:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 16:
-                        question = "";
+                case 16:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 17:
-                        question = "";
+                case 17:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 18:
-                        question = "";
+                case 18:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
+                    break;
 
-                    case 19:
-                        question = "";
+                case 19:
+                    question = "";
 
-                        answers = "A: Taurus"
-                                + "\nB: Gemini"
-                                + "\nC: Leo"
-                                + "\nD: Cancer";
+                    answers = "A: Taurus"
+                            + "B: Gemini"
+                            + "C: Leo"
+                            + "D: Cancer";
 
-                        correctAnswer = "";
+                    correctAnswer = "";
 
-                        break;
-                }
-                
-                newQuestionMethod(question);
-                newAnswersMethod(answers);
-                newCorrectAnswerMethod(correctAnswer);
+                    break;
+            }
+
+            newQuestionMethod(question);
+            newAnswersMethod(answers);
+            newCorrectAnswerMethod(correctAnswer);
         }
 
-        public static void newQuestionMethod(string ques)
+        private static void newQuestionMethod(string ques)
         {
             newQuestion = ques;
         }
 
-        public static void newAnswersMethod(string ans)
+        private static void newAnswersMethod(string ans)
         {
             updatedAnswers = ans;
         }
 
-        public static void newCorrectAnswerMethod(string corAns)
+        private static void newCorrectAnswerMethod(string corAns)
         {
             updatedCorrectAnswer = corAns;
         }
-        
-        
-//DEBUG SECTION
-        public static void Main(String[] args)
-        {
-            String userInput;
 
-//Set up boolArray with all false for questions visited, only done once
-            for (int x = 0; x < boolArray.Length; x++)
-            {
-                boolArray[x] = false;
-            }
-
-//this loop will run 10 times or equivelent to gameRounds variable
-            for (int r = 0; r < gameRounds; r++)
-            {
-                //call questions method each run to get new data
-                questions();
-
-//newQuestion
-                Console.Out.WriteLine((r + 1) + ". " + newQuestion);
-                Console.Out.WriteLine(updatedAnswers);
-                Console.Out.WriteLine();
-                Console.Out.WriteLine("Answer with a, b, c, or d:");
-                userInput = Console.ReadLine();
-
-                if (userInput.ToUpper() == updatedCorrectAnswer.ToUpper())
-                {
-                    points = 100;
-                }
-                else
-                {
-                    missed++;
-                    points = 0;
-                }
-                //add up points
-                totalPoints += points;
-                Console.Out.WriteLine();
-            }
-
-            //Debugging
-            Console.Out.WriteLine("You scored: " + totalPoints);
-            Console.Out.WriteLine("You missed: " + missed + " questions.");
-            Console.Read();
-
-        }
     }
 }

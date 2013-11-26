@@ -15,8 +15,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 using Game_Server.Networking;
-//using Game_Server.Game;
+using Game_Server.Game;
 
 namespace Game_Server
 {
@@ -26,6 +27,7 @@ namespace Game_Server
         private static ServerSocket serverSock;
         public delegate void updateChatBoxDelegate(String textBoxString); // delegate type 
         public updateChatBoxDelegate updateTextBox; // delegate object
+        private const int MAXQUESTIONS = 1;
 
         public ServerForm()
         {
@@ -35,6 +37,7 @@ namespace Game_Server
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
         }
 
+
         /*
          * Start server button
          */
@@ -42,12 +45,15 @@ namespace Game_Server
         {
             stopSrvBtn.Enabled = true;
             startSrvBtn.Enabled = false;
+            startGameBtn.Enabled = true;
 
             serverSock.Bind(25001);
             serverSock.Listen(100);
             serverSock.Accept();
             updateChatWin("Waiting for connections...");
         }
+
+
         /*
          * Stop server button
          */
@@ -57,13 +63,34 @@ namespace Game_Server
             stopSrvBtn.Enabled = false;  
         }
 
+
         /*
          * Start game button
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
-            //wait for set number of players
+            int questionNum = 1;
+            while (questionNum <= MAXQUESTIONS)
+            {
+                GameMaster.questions();
+                String question = GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
+                serverSock.broadCast(question);
+                updateChatWin(question);
+                
+                //wait 15-20 seconds for players to submit answers.
+
+                foreach(Player p in serverSock.players) {
+                    if (p.answer == GameMaster.updatedCorrectAnswer)
+                    {
+                        p.score++;
+                        serverSock.send(p.handlerSock, "You answered correctly!");
+                    }
+                }
+
+                questionNum++;
+            }
         }
+
 
         /*
          * Send line button
@@ -72,6 +99,7 @@ namespace Game_Server
         {
             //send broadcast to clients
         }
+
 
         /*
          * Updates the main chat/status textbox for the server form.
@@ -94,8 +122,6 @@ namespace Game_Server
         {
             this.Close();
         }
-
-
 
     }
 }

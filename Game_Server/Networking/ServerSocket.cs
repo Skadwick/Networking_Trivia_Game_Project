@@ -22,6 +22,7 @@ namespace Game_Server.Networking
         public int score;
         public String userName;
         public Socket handlerSock;
+        public String answer;
     }
 
 
@@ -34,7 +35,7 @@ namespace Game_Server.Networking
 
         public ServerForm serverGUI;
 
-        private List<Player> players = new List<Player>();
+        public List<Player> players = new List<Player>();
 
 
         /*
@@ -134,7 +135,7 @@ namespace Game_Server.Networking
          * Converts the string data from the form class to a byte array and
          * begins trying to send it.
          */
-        private void send(Socket client, String msg)
+        public void send(Socket client, String msg)
         {
 
             byte[] data = Encoding.UTF8.GetBytes(msg);
