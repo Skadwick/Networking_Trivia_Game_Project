@@ -297,35 +297,46 @@ namespace TriviaGameMaster
 
                         break;
                 }
-
-                //Use to send data to GUI for refresh
-                //create the sendNewData method inside the GUI refresh.
-                sendNewData(question, answers, correctAnswer);
+                
+                newQuestion(question);
+                newAnswers(answers);
+                newCorrectAnswer(correctAnswer);
+        }
+        
+        public static void newQuestion(string ques)
+        {
+            newQuestion = ques;
+        }
+        
+        public static void newAnswers(string ans)
+        {
+            updatedAnswers = ans;
         }
 
-        //use to send data to GUI for refresh
-        public static void sendNewData(String quest, String answersPossible, string corAns)
+        public static void newCorrectAnswers(string corAns)
         {
-            newQuestion = quest;
-            updatedAnswers = answersPossible;
             updatedCorrectAnswer = corAns;
         }
-
+        
+        
+//DEBUG SECTION
         public static void Main(String[] args)
         {
             String userInput;
 
+//Set up boolArray with all false for questions visited, only done once
             for (int x = 0; x < boolArray.Length; x++)
             {
                 boolArray[x] = false;
             }
 
+//this loop will run 10 times or equivelent to gameRounds variable
             for (int r = 0; r < gameRounds; r++)
             {
                 //call questions method each run to get new data
                 questions();
 
-
+//newQuestion
                 Console.Out.WriteLine((r + 1) + ". " + newQuestion);
                 Console.Out.WriteLine(updatedAnswers);
                 Console.Out.WriteLine();
