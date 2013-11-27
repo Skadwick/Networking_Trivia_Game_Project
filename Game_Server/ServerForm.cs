@@ -65,31 +65,41 @@ namespace Game_Server
 
 
         /*
-         * Start game button
+         * Start game button.  
+         * 
+         * Starts the main game loop which sends out questions
+         * and checks the clients' answers.  Client score is updated accordingly and a message
+         * is sent to them with their results.
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
-
-            foreach (Player p in serverSock.players)
-            {
-                if (p.answer == GameMaster.updatedCorrectAnswer)
+            int questionNum = 1;
+            while (questionNum <= MAXQUESTIONS)
+            {   
+                //Check each players answer.
+                foreach (Player p in serverSock.players)
                 {
-                    p.score++;
-                    serverSock.send(p.handlerSock, "You answered correctly!");
+                    if (p.answer == GameMaster.updatedCorrectAnswer)
+                    {
+                        p.score++;
+                        serverSock.send(p.handlerSock, "You answered correctly!");
+                    }
+                    else
+                    {
+                        serverSock.send(p.handlerSock, "You answered incorrectly :(");
+                    }
                 }
-                else
-                {
-                    serverSock.send(p.handlerSock, "You answered incorrectly :(");
-                }
-            }
 
-            
+
                 GameMaster.questions();
                 String question = GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
                 serverSock.nextQuestion(question);
                 updateChatWin(question);
-                
+
                 //wait 15-20 seconds for players to submit answers.
+                questionNum++;
+
+            }
 
         }
 

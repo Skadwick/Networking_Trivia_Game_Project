@@ -30,7 +30,7 @@ namespace Game_Client.Networking
 
 
         /*
-         * 
+         * Set's the username for this client so that it can be sent to the server.
          */
         public void setUserName(string nm)
         {

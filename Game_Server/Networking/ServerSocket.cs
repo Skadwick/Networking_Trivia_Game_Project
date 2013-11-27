@@ -17,6 +17,14 @@ using System.Net.Sockets;
 namespace Game_Server.Networking
 {
 
+    /*
+     * The Player class is used to keep track of the current answer, score, and
+     * user name associated with each socket.  
+     * 
+     * Because this class holds a reference to the client's socket, we can send and
+     * receive data directly from that client without having to wait
+     * for an Iasync result event to trigger the socket object.
+     */
     class Player
     {
         public int score;
@@ -137,7 +145,6 @@ namespace Game_Server.Networking
          */
         public void send(Socket client, String msg)
         {
-
             byte[] data = Encoding.UTF8.GetBytes(msg);
             try
             {
@@ -166,7 +173,8 @@ namespace Game_Server.Networking
 
         /*
          * Broadcasts the question to clients and begins trying to receive
-         * their responses to the question.
+         * their responses to the question.  Once a response is received, the 
+         * ReceivedAnswer method is triggered.
          */
         public void nextQuestion(String question)
         {
@@ -178,6 +186,11 @@ namespace Game_Server.Networking
         }
 
 
+        /*
+         * Receives an answer to the current trivia question from the client.  This method updates the Player
+         * object accordingly.
+         * 
+         */
         private void ReceivedAnswer(IAsyncResult result)
         {
             Socket clientSocket = result.AsyncState as Socket; //cast AsyncState to a Socket object
@@ -317,9 +330,6 @@ namespace Game_Server.Networking
                 serverGUI.Invoke(serverGUI.updateTextBox, e.ToString());
             }
         }
-
-
-
 
     }
 }
