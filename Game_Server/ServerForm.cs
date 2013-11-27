@@ -69,26 +69,28 @@ namespace Game_Server
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
-            int questionNum = 1;
-            while (questionNum <= MAXQUESTIONS)
+
+            foreach (Player p in serverSock.players)
             {
+                if (p.answer == GameMaster.updatedCorrectAnswer)
+                {
+                    p.score++;
+                    serverSock.send(p.handlerSock, "You answered correctly!");
+                }
+                else
+                {
+                    serverSock.send(p.handlerSock, "You answered incorrectly :(");
+                }
+            }
+
+            
                 GameMaster.questions();
                 String question = GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
-                serverSock.broadCast(question);
+                serverSock.nextQuestion(question);
                 updateChatWin(question);
                 
                 //wait 15-20 seconds for players to submit answers.
 
-                foreach(Player p in serverSock.players) {
-                    if (p.answer == GameMaster.updatedCorrectAnswer)
-                    {
-                        p.score++;
-                        serverSock.send(p.handlerSock, "You answered correctly!");
-                    }
-                }
-
-                questionNum++;
-            }
         }
 
 

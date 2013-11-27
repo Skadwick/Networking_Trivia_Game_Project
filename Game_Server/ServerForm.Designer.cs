@@ -75,6 +75,7 @@
             this.srvConslTxt.Multiline = true;
             this.srvConslTxt.Name = "srvConslTxt";
             this.srvConslTxt.ReadOnly = true;
+            this.srvConslTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.srvConslTxt.Size = new System.Drawing.Size(327, 281);
             this.srvConslTxt.TabIndex = 3;
             // 

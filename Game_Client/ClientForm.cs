@@ -52,6 +52,19 @@ namespace Game_Client
         {
             //if time runs out null should be submitted
             this.timer1.Start();
+            String ans = "";
+
+            if (selctA_RBtn.Checked == true)
+                ans = "A";
+            else if (selctB_RBtn.Checked == true)
+                ans = "B";
+            else if (selctC_RBtn.Checked == true)
+                ans = "C";
+            else if (selctD_RBtn.Checked == true)
+                ans = "D";
+
+            clientSock.send(ans);
+
         }
 
         private void timer1_Tick(object sender, EventArgs e)

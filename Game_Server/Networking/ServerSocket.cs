@@ -165,6 +165,52 @@ namespace Game_Server.Networking
 
 
         /*
+         * Broadcasts the question to clients and begins trying to receive
+         * their responses to the question.
+         */
+        public void nextQuestion(String question)
+        {
+            foreach (Player p in players)
+            {
+                send(p.handlerSock, question);
+                p.handlerSock.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedAnswer, p.handlerSock);
+            }
+        }
+
+
+        private void ReceivedAnswer(IAsyncResult result)
+        {
+            Socket clientSocket = result.AsyncState as Socket; //cast AsyncState to a Socket object
+            
+            try
+            {
+                int bufferSize = clientSocket.EndReceive(result);
+                byte[] packet = new byte[bufferSize];
+                Array.Copy(recvBuf, packet, packet.Length);
+
+                foreach (Player p in players)
+                {
+                    if (p.handlerSock == clientSocket)
+                    {
+                        p.answer = Encoding.UTF8.GetString(packet);
+                        serverGUI.Invoke(serverGUI.updateTextBox, p.userName + " selected answer: " + p.answer);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                if (clientSocket.Connected)
+                {
+                    serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
+                }
+            }
+
+            recvBuf = new byte[1024]; //clear the buffer
+            
+        }
+
+
+        /*
          * Setup of the client handler socket.  
          * 
          * This method is triggered by an IAsync event in the BeginAccept() method.  
@@ -244,7 +290,7 @@ namespace Game_Server.Networking
             recvBuf = new byte[1024]; //clear the buffer
             if (clientSocket.Connected)
             {
-                clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
+                //clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
             }
         }
 
