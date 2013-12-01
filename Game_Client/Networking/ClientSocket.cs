@@ -139,11 +139,12 @@ namespace Game_Client.Networking
             //Handle packet
             clientGUI.Invoke(clientGUI.updateTextBox, msg);
 
+            //Check if the message is a question.  All questions begin with
+            // the same format: Q(digit)
             if (msg[0] == 'Q' && Char.IsNumber(msg[1]))
             {
                 clientGUI.Invoke(clientGUI.startQTimer);
             }
-
 
             buffer = new byte[1024];
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, null);

@@ -66,7 +66,6 @@ namespace Game_Client
             else if (selctD_RBtn.Checked == true)
                 ans = "D";
 
-
             clientSock.send(ans);
 
         }
@@ -92,6 +91,7 @@ namespace Game_Client
         void startTimer()
         {
             //if time runs out null should be submitted
+            timePrgBar.Value = 0; //reset the progress bar.
             this.timer1.Start();
         }
 

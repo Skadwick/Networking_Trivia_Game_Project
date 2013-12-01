@@ -62,6 +62,7 @@ namespace Game_Server
         {
             startSrvBtn.Enabled = true;
             stopSrvBtn.Enabled = false;  
+            startGameBtn.Enabled = false;
         }
 
 
@@ -74,6 +75,7 @@ namespace Game_Server
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
+            startGameBtn.Enabled = false;
             Thread game = new Thread(sendRecvQuestions);          // Kick off a new thread
             game.Start();    
         }
@@ -90,12 +92,13 @@ namespace Game_Server
                 String question = "Q" + questionNum + ": " + GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
                 serverSock.sendNextQuestion(question);
                 updateChatWin(question);
-                Thread.Sleep(16000);
+                Thread.Sleep(17000);
 
                 //wait 15-20 seconds for players to submit answers.
                 questionNum++;
 
             }
+            startGameBtn.Enabled = false;
         }
 
 

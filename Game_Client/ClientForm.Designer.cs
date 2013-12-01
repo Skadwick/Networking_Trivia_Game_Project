@@ -128,6 +128,7 @@
             // 
             this.timePrgBar.ForeColor = System.Drawing.Color.Maroon;
             this.timePrgBar.Location = new System.Drawing.Point(103, 405);
+            this.timePrgBar.Maximum = 150;
             this.timePrgBar.Name = "timePrgBar";
             this.timePrgBar.Size = new System.Drawing.Size(386, 19);
             this.timePrgBar.TabIndex = 6;
