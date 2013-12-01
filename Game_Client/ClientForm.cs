@@ -101,7 +101,7 @@ namespace Game_Client
          */
         void updateChatWin(String msg)
         {
-            this.clnConslTxt.Text += "> " + msg + Environment.NewLine;
+            this.clnConslTxt.AppendText("> " + msg + Environment.NewLine);
         }
    
     }

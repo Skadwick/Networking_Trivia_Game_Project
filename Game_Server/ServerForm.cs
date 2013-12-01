@@ -136,7 +136,7 @@ namespace Game_Server
             }
             else
             {
-                this.srvConslTxt.Text += ">" + str + Environment.NewLine;
+                this.srvConslTxt.AppendText(">" + str + Environment.NewLine);
             }
         }
 
