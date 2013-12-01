@@ -134,16 +134,18 @@ namespace Game_Client.Networking
             int bufLength = socket.EndReceive(result);
             byte[] packet = new byte[bufLength];
             Array.Copy(buffer, packet, packet.Length);
-            String msg = Encoding.UTF8.GetString(packet);
-
-            //Handle packet
-            clientGUI.Invoke(clientGUI.updateTextBox, msg);
+            String msg = Encoding.UTF8.GetString(packet);          
 
             //Check if the message is a question.  All questions begin with
             // the same format: Q(digit)
             if (msg[0] == 'Q' && Char.IsNumber(msg[1]))
             {
                 clientGUI.Invoke(clientGUI.startQTimer);
+                clientGUI.Invoke(clientGUI.updateTextBox, Environment.NewLine + msg);
+            }
+            else
+            {
+                clientGUI.Invoke(clientGUI.updateTextBox, msg);
             }
 
             buffer = new byte[1024];

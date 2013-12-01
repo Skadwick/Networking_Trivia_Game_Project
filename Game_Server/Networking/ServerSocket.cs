@@ -192,7 +192,8 @@ namespace Game_Server.Networking
                         }
                         else
                         {
-                            send(p.handlerSock, "You answered incorrectly :(");
+                            send(p.handlerSock, "You answered incorrectly :(" + Environment.NewLine +
+                                                "Correct answer: " + GameMaster.updatedCorrectAnswer);
                         }
                     }
                 }
