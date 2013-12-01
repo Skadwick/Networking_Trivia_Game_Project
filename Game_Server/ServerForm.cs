@@ -25,10 +25,10 @@ namespace Game_Server
     {
 
         private static ServerSocket serverSock;
-        public delegate void updateChatBoxDelegate(String textBoxString); // delegate type 
-        public updateChatBoxDelegate updateTextBox; // delegate object
+        public delegate void updateChatBoxDelegate(String textBoxString);
+        public updateChatBoxDelegate updateTextBox;
         private delegate void LabelWriteDelegate(string value);
-        private const int MAXQUESTIONS = 3;
+        private const int MAXQUESTIONS = 3; //using 3 for testing, should be 10 for final submission.
 
         public ServerForm()
         {
@@ -41,6 +41,9 @@ namespace Game_Server
 
         /*
          * Start server button
+         * 
+         * Binds, listens, and the begins accepting connections to the socket.  The stop server,
+         * start server and start game buttons are updated accordingly.
          */
         private void startSrvBtn_Click(object sender, EventArgs e)
         {
@@ -57,6 +60,9 @@ namespace Game_Server
 
         /*
          * Stop server button
+         * 
+         * Update the form buttons accordingly and close the listener socket, as well
+         * as any handler sockets that were created for clients.
          */
         private void stopSrvBtn_Click(object sender, EventArgs e)
         {
@@ -69,17 +75,25 @@ namespace Game_Server
         /*
          * Start game button.  
          * 
-         * Starts the main game loop which sends out questions
-         * and checks the clients' answers.  Client score is updated accordingly and a message
-         * is sent to them with their results.
+         * Creates a new thread for the main game loop to run on.
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
             startGameBtn.Enabled = false;
-            Thread game = new Thread(sendRecvQuestions);          // Kick off a new thread
+            Thread game = new Thread(sendRecvQuestions);
             game.Start();    
         }
 
+
+        /*
+         * Intended to be run on a thread separate from the form object.  
+         * 
+         * Loops through the necessary number of questions, sending each to the
+         * clients and then checking their answer.  The thread running this method will
+         * pause for 17s between each question. At the end of the game, the scores are
+         * broadcast to all clients.
+         * 
+         */
         private void sendRecvQuestions()
         {
             int questionNum = 1;
@@ -98,16 +112,16 @@ namespace Game_Server
                 questionNum++;
 
             }
-            startGameBtn.Enabled = false;
-        }
 
+            String scores = "Scores for this game: ";
 
-        /*
-         * Send line button
-         */
-        private void sndBtn_Click(object sender, EventArgs e)
-        {
-            //send broadcast to clients
+            foreach (Player p in serverSock.players)
+            {
+                scores += Environment.NewLine + p.userName + " : " + p.score;
+            }
+
+            serverSock.broadCast(scores);
+
         }
 
 
@@ -124,11 +138,6 @@ namespace Game_Server
             {
                 this.srvConslTxt.Text += ">" + str + Environment.NewLine;
             }
-        }
-
-        private void clientListTxt_TextChanged(object sender, EventArgs e)
-        {
-            //display client list (hashTable from server)
         }
 
 

@@ -49,9 +49,6 @@ namespace Game_Server.Networking
 
         /*
          * Create a socket to listen for connections.
-         * Address format: iPv4
-         * Communication type: stream
-         * protocol: TCP
          */
         public ServerSocket()
         {
@@ -62,12 +59,6 @@ namespace Game_Server.Networking
         /*
          * Sets a reference to the calling form.  This reference is used to access a
          * delegate invoke() method so that we can update fields in the form class.
-         * 
-         * For example, the following line of code calls a delegate in the form class.
-         * serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
-         * In this case, updateTextBox is a delegate which updates the main text window on
-         * the server form.  The string following the delegate call is the parameter
-         * to be passed to the method that the delegate is handleing. 
          */
         public void setForm(ServerForm sf)
         {
@@ -78,10 +69,6 @@ namespace Game_Server.Networking
         /*
          * Bind the listener socket to any ip address associated with the computer running 
          * the server, and the port which is passed as a parameter from the calling class.
-         * 
-         * IPAddress.Any will listen on any IP Addresses assigned to the PC. For example, if the 
-         * server is connected to a network via wireless and wired, there would be two IP Addresses 
-         * assigned. This means that the server will listen for requests on both IP Addresses.
          */
         public void Bind(int port)
         {
@@ -99,10 +86,7 @@ namespace Game_Server.Networking
         /*
          * Listen for incoming connections trying to connect to the socket.
          * 
-         * Backlog is passed as an argument from the calling class.  This value 
-         * represents the max number of connections waiting to be served before the
-         * server starts denying connections.  Around 200-300 connections is a good
-         * value for most computers.
+         * backlog == the max number of clients waiting to connect at any given time.
          */
         public void Listen(int backlog)
         {
@@ -118,12 +102,8 @@ namespace Game_Server.Networking
 
 
         /*
-         * Begin listening for connections asynchronously.  
-         * 
-         * When a client is accepted, an IAsyncResult event is executed.  This IAsyncResult 
-         * object contains an instance the socket object that connected and triggered 
-         * the event.  This object is then sent to the AcceptedCallback method, where 
-         * any work that needs to be done on the client socket can be executed.
+         * Begin accepting connections asynchronously. Once a client is accepted, the 
+         * AcceptedCallback method is called. 
          */
         public void Accept()
         {
@@ -139,18 +119,14 @@ namespace Game_Server.Networking
 
 
         /*
-         * Send data to a client.
-         * 
-         * Converts the string data from the form class to a byte array and
-         * begins trying to send it.
+         * Send data to a client.  Once the message is sent, the SendCallback method is called.
          */
         public void send(Socket client, String msg)
         {
             byte[] data = Encoding.UTF8.GetBytes(msg);
             try
             {
-                client.BeginSend(data, 0, data.Length, 0,
-                            new AsyncCallback(SendCallback), client);
+                client.BeginSend(data, 0, data.Length, 0, new AsyncCallback(SendCallback), client);
             }
             catch
             {
@@ -175,7 +151,7 @@ namespace Game_Server.Networking
         /*
          * Broadcasts the question to clients and begins trying to receive
          * their responses to the question.  Once a response is received, the 
-         * ReceivedAnswer method is triggered.
+         * ReceivedAnswer method is called.
          */
         public void sendNextQuestion(String question)
         {
@@ -189,12 +165,11 @@ namespace Game_Server.Networking
 
         /*
          * Receives an answer to the current trivia question from the client.  This method updates the Player
-         * object accordingly.
-         * 
+         * object accordingly, and sends that player some feedback.
          */
         private void ReceivedAnswer(IAsyncResult result)
         {
-            Socket clientSocket = result.AsyncState as Socket; //cast AsyncState to a Socket object
+            Socket clientSocket = result.AsyncState as Socket;
             
             try
             {
@@ -221,7 +196,6 @@ namespace Game_Server.Networking
                         }
                     }
                 }
-
             }
             catch
             {
@@ -239,14 +213,9 @@ namespace Game_Server.Networking
         /*
          * Setup of the client handler socket.  
          * 
-         * This method is triggered by an IAsync event in the BeginAccept() method.  
-         * The IAsyncResult object contains a reference tothe client that connected's socket.  
-         * Acceptance of connections is temporarily blocked while work is being 
-         * done on the current connection, but clients attempting to connect
-         * during this time will not be lost.  Connections will still be in the backlog list
-         * which was initiated in the Listen() method.  Once the server is done setting up the
-         * current client, it begins accepting again, and any clients that attempted to connect while
-         * accept was blocked will now be able to connect.
+         * This method is triggered when a client is accepted by the socket.  A player object is
+         * created for the connection, and the server sends some feedback.  Once this client
+         * is completely setup, the server begins accepting again.
          */
         private void AcceptedCallback(IAsyncResult result)
         {
@@ -275,9 +244,8 @@ namespace Game_Server.Networking
          * Handle data received from a client.  
          * 
          * This method is triggered by an IAsync event sent from the BeginReceive() method.  
-         * When this method is called, receiving data from the client that triggered 
-         * the event is temporarily blocked, but resumes once the server is done
-         * working with the data.  
+         * This should be triggered only by the first response from the client. The data
+         * sent from the client should contain their selected username.
          */
         private void ReceivedCallback(IAsyncResult result)
         {
@@ -314,10 +282,6 @@ namespace Game_Server.Networking
             }
 
             recvBuf = new byte[1024]; //clear the buffer
-            if (clientSocket.Connected)
-            {
-                //clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
-            }
         }
 
 
