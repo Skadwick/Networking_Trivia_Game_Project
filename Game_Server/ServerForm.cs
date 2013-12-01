@@ -27,7 +27,8 @@ namespace Game_Server
         private static ServerSocket serverSock;
         public delegate void updateChatBoxDelegate(String textBoxString); // delegate type 
         public updateChatBoxDelegate updateTextBox; // delegate object
-        private const int MAXQUESTIONS = 1;
+        private delegate void LabelWriteDelegate(string value);
+        private const int MAXQUESTIONS = 3;
 
         public ServerForm()
         {
@@ -73,34 +74,28 @@ namespace Game_Server
          */
         private void startGameBtn_Click(object sender, EventArgs e)
         {
+            Thread game = new Thread(sendRecvQuestions);          // Kick off a new thread
+            game.Start();    
+        }
+
+        private void sendRecvQuestions()
+        {
             int questionNum = 1;
+
             while (questionNum <= MAXQUESTIONS)
-            {   
-                //Check each players answer.
-                foreach (Player p in serverSock.players)
-                {
-                    if (p.answer == GameMaster.updatedCorrectAnswer)
-                    {
-                        p.score++;
-                        serverSock.send(p.handlerSock, "You answered correctly!");
-                    }
-                    else
-                    {
-                        serverSock.send(p.handlerSock, "You answered incorrectly :(");
-                    }
-                }
+            {
 
-
+                //Send question
                 GameMaster.questions();
-                String question = "Q"+questionNum+": " + GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
-                serverSock.nextQuestion(question);
+                String question = "Q" + questionNum + ": " + GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
+                serverSock.sendNextQuestion(question);
                 updateChatWin(question);
+                Thread.Sleep(16000);
 
                 //wait 15-20 seconds for players to submit answers.
                 questionNum++;
 
             }
-
         }
 
 
@@ -116,9 +111,16 @@ namespace Game_Server
         /*
          * Updates the main chat/status textbox for the server form.
          */
-        void updateChatWin(string str)
+        public void updateChatWin(string str)
         {
-            this.srvConslTxt.Text += ">" + str + Environment.NewLine;
+            if (InvokeRequired) //Check if another thread is calling the method.
+            {
+                Invoke(new LabelWriteDelegate(updateChatWin), str);
+            }
+            else
+            {
+                this.srvConslTxt.Text += ">" + str + Environment.NewLine;
+            }
         }
 
         private void clientListTxt_TextChanged(object sender, EventArgs e)

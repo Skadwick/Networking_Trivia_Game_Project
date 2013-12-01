@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using Game_Server.Game;
 
 namespace Game_Server.Networking
 {
@@ -176,7 +177,7 @@ namespace Game_Server.Networking
          * their responses to the question.  Once a response is received, the 
          * ReceivedAnswer method is triggered.
          */
-        public void nextQuestion(String question)
+        public void sendNextQuestion(String question)
         {
             foreach (Player p in players)
             {
@@ -203,12 +204,24 @@ namespace Game_Server.Networking
 
                 foreach (Player p in players)
                 {
-                    if (p.handlerSock == clientSocket)
+                    if (p.handlerSock == clientSocket) //Find the client that sent the answer
                     {
                         p.answer = Encoding.UTF8.GetString(packet);
                         serverGUI.Invoke(serverGUI.updateTextBox, p.userName + " selected answer: " + p.answer);
+
+                        //Check their response, and update their score.  
+                        if (p.answer == GameMaster.updatedCorrectAnswer)
+                        {
+                            p.score++;
+                            send(p.handlerSock, "You answered correctly!");
+                        }
+                        else
+                        {
+                            send(p.handlerSock, "You answered incorrectly :(");
+                        }
                     }
                 }
+
             }
             catch
             {

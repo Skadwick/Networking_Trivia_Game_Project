@@ -16,11 +16,10 @@ namespace Game_Client
 
 
         private static ClientSocket clientSock;
-        public delegate void updateChatBoxDelegate(String textBoxString); // delegate type 
-        public updateChatBoxDelegate updateTextBox; // delegate object
-
-        public delegate void startQuestionTimerDelegate(); // delegate type 
-        public startQuestionTimerDelegate startQTimer; // delegate object
+        public delegate void updateChatBoxDelegate(String textBoxString);
+        public updateChatBoxDelegate updateTextBox;
+        public delegate void startQuestionTimerDelegate();
+        public startQuestionTimerDelegate startQTimer;
 
         public ClientForm()
         {
