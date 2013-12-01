@@ -54,6 +54,7 @@ namespace Game_Client.Networking
             clientGUI = frm;
         }
 
+
         /*
          * Attempts to connect to the server.
          * 
@@ -75,6 +76,7 @@ namespace Game_Client.Networking
             }
         }
 
+
         /*
          * Send data to the server.
          * 
@@ -92,6 +94,7 @@ namespace Game_Client.Networking
                 clientGUI.Invoke(clientGUI.updateTextBox, "Failed to send message.");
             }
         }
+
 
         /*
          * Finish the connection to the server.
@@ -117,6 +120,7 @@ namespace Game_Client.Networking
             }
         }
 
+
         /*
          * Handle data received from the server.  
          * 
@@ -130,9 +134,16 @@ namespace Game_Client.Networking
             int bufLength = socket.EndReceive(result);
             byte[] packet = new byte[bufLength];
             Array.Copy(buffer, packet, packet.Length);
+            String msg = Encoding.UTF8.GetString(packet);
 
             //Handle packet
-            clientGUI.Invoke(clientGUI.updateTextBox, Encoding.UTF8.GetString(packet));
+            clientGUI.Invoke(clientGUI.updateTextBox, msg);
+
+            if (msg[0] == 'Q' && Char.IsNumber(msg[1]))
+            {
+                clientGUI.Invoke(clientGUI.startQTimer);
+            }
+
 
             buffer = new byte[1024];
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, null);

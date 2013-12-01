@@ -92,7 +92,7 @@ namespace Game_Server
 
 
                 GameMaster.questions();
-                String question = GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
+                String question = "Q"+questionNum+": " + GameMaster.newQuestion + Environment.NewLine + GameMaster.updatedAnswers;
                 serverSock.nextQuestion(question);
                 updateChatWin(question);
 

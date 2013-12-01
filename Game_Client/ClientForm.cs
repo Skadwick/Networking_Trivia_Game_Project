@@ -19,6 +19,8 @@ namespace Game_Client
         public delegate void updateChatBoxDelegate(String textBoxString); // delegate type 
         public updateChatBoxDelegate updateTextBox; // delegate object
 
+        public delegate void startQuestionTimerDelegate(); // delegate type 
+        public startQuestionTimerDelegate startQTimer; // delegate object
 
         public ClientForm()
         {
@@ -26,7 +28,9 @@ namespace Game_Client
             clientSock = new ClientSocket();
             clientSock.setForm(this); //Sending a reference of the form to the ServerSocket
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
+            startQTimer = new startQuestionTimerDelegate(startTimer);
         }
+
 
         /*
          * Connect to server button
@@ -45,14 +49,13 @@ namespace Game_Client
             }
         }
 
+
         /*
          * Submit answer button
          */
         private void sbmtBtn_Click(object sender, EventArgs e)
         {
-            //if time runs out null should be submitted
-            this.timer1.Start();
-
+            
             //Send the letter answer corresponding with the selected checkbox.
             String ans = "";
             if (selctA_RBtn.Checked == true)
@@ -63,6 +66,8 @@ namespace Game_Client
                 ans = "C";
             else if (selctD_RBtn.Checked == true)
                 ans = "D";
+
+
             clientSock.send(ans);
 
         }
@@ -72,6 +77,7 @@ namespace Game_Client
             this.timePrgBar.Increment(1);
         }
 
+
         /*
          * Disconnect from server button
          */
@@ -80,6 +86,17 @@ namespace Game_Client
             this.Close();
         }
 
+
+        /*
+         * Starts the form timer.
+         */
+        void startTimer()
+        {
+            //if time runs out null should be submitted
+            this.timer1.Start();
+        }
+
+
         /*
          * Updates the main chat/status textbox for the client form.
          */
@@ -87,7 +104,6 @@ namespace Game_Client
         {
             this.clnConslTxt.Text += "> " + msg + Environment.NewLine;
         }
-
-        
+   
     }
 }

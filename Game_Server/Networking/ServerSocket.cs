@@ -88,7 +88,7 @@ namespace Game_Server.Networking
             {
                 listener.Bind(new IPEndPoint(IPAddress.Any, port));
             }
-            catch (Exception e)
+            catch
             {
                 serverGUI.Invoke(serverGUI.updateTextBox, "Error Binding socket!");
             }
@@ -109,7 +109,7 @@ namespace Game_Server.Networking
             {
                 listener.Listen(backlog);
             }
-            catch (Exception e)
+            catch
             {
                 serverGUI.Invoke(serverGUI.updateTextBox, "Error listening for connections!");
             }
@@ -130,7 +130,7 @@ namespace Game_Server.Networking
             {
                 listener.BeginAccept(AcceptedCallback, null);
             }
-            catch (Exception e)
+            catch
             {
                 serverGUI.Invoke(serverGUI.updateTextBox, "Error accepting a client!");
             }
@@ -210,7 +210,7 @@ namespace Game_Server.Networking
                     }
                 }
             }
-            catch (Exception e)
+            catch
             {
                 if (clientSocket.Connected)
                 {
@@ -287,7 +287,7 @@ namespace Game_Server.Networking
                 serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.");
 
             }
-            catch (Exception e)
+            catch
             {
                 if (clientSocket.Connected)
                 {
@@ -326,7 +326,9 @@ namespace Game_Server.Networking
                 int bytesSent = client.EndSend(result);
                 //serverGUI.Invoke(serverGUI.updateTextBox, "Sent message to client");
             
-            }catch (Exception e) {
+            }
+            catch (Exception e) 
+            {
                 serverGUI.Invoke(serverGUI.updateTextBox, e.ToString());
             }
         }
