@@ -183,24 +183,22 @@ namespace Game_Server.Networking
                 {
                     continue;
                 }
-  
             }
         }
 
 
         /*
-         * Deleting disconnected clients from List<Player> players, while preventing 
-         * the error: InvalidOperationException. Collection was modified; enumeration operation may not execute.
+         * Searches through the list of players to find clients who are no longer connected.
+         * Clients who are no longer connected have their socket shutdown, and then the
+         * asynchronous disconnect method is called.  Finally, the client is removed
+         * from the list of players.
          */
         private void handleDisconnects()
         {
             List<Player> notConnected = new List<Player>();
-
-            //Find players that are no longer connected.  Add them to the notConnected list so
-            //they can be handled afterwards. 
+            //Find players that are no longer connected.
             foreach (Player p in players)
             {
-                //Check if the player is still connected
                 if (!p.handlerSock.Connected)
                 {
                     notConnected.Add(p);
@@ -208,11 +206,26 @@ namespace Game_Server.Networking
                 }
             }
 
+            //Handle clients who are no longer connected.
             foreach (Player nc in notConnected)
             {
+                nc.handlerSock.Shutdown(SocketShutdown.Both);
+                nc.handlerSock.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), nc.handlerSock);
                 players.Remove(nc);
                 serverGUI.Invoke(serverGUI.updateTextBox, nc.userName + " has disconnected.");
+                broadCast(nc.userName + " has disconnected.");
             }
+        }
+
+
+        /*
+         * Completes the closing of the connection with the client, and updates
+         * the textbox containing players and their scores.
+         */
+        private void DisconnectCallback(IAsyncResult ar) {
+            // Complete the disconnect request.
+            Socket client = (Socket) ar.AsyncState;
+            client.EndDisconnect(ar);
             serverGUI.Invoke(serverGUI.updatePlayerBox);
         }
 
@@ -230,7 +243,6 @@ namespace Game_Server.Networking
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
                 recvBuf = new byte[1024]; //clear the buffer for next time
-
                 handleDisconnects();
 
                 foreach (Player p in players)
@@ -315,10 +327,11 @@ namespace Game_Server.Networking
                     {
                         p.userName = Encoding.UTF8.GetString(packet);
                         p.score = 0;
+                        broadCast(p.userName + " has joined the game.");
                         break;
                     }
                 }
-                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.");
+                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.");               
                 serverGUI.Invoke(serverGUI.updatePlayerBox);
             }
             catch
