@@ -146,7 +146,7 @@ namespace Game_Client.Networking
             //If not a question, handle the message like normal.
             else
             {
-                clientGUI.Invoke(clientGUI.updateTextBox, msg);
+                clientGUI.Invoke(clientGUI.updateTextBox, "(Server): " + msg);
             }
 
             buffer = new byte[1024];

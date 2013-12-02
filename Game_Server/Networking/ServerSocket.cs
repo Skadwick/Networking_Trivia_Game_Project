@@ -141,9 +141,18 @@ namespace Game_Server.Networking
          */
         public void broadCast(string msg)
         {
+            handleDisconnects();
             foreach (Player p in players)
             {
-                send(p.handlerSock, msg);
+                //Check if the player is still connected
+                if (p.handlerSock.Connected)
+                {
+                    send(p.handlerSock, msg);
+                }
+                else
+                {
+                    continue;
+                }    
             }
         }
 
@@ -155,18 +164,56 @@ namespace Game_Server.Networking
          */
         public void sendNextQuestion(String question)
         {
+            handleDisconnects();
             foreach (Player p in players)
             {
-                send(p.handlerSock, question);
-                try
+                if (p.handlerSock.Connected)
                 {
-                    p.handlerSock.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedAnswer, p.handlerSock);
+                    send(p.handlerSock, question);
+                    try
+                    {
+                        p.handlerSock.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedAnswer, p.handlerSock);
+                    }
+                    catch
+                    {
+                        serverGUI.Invoke(serverGUI.updateTextBox, "Error while trying to receive an answer.");
+                    }
                 }
-                catch
+                else
                 {
-                    serverGUI.Invoke(serverGUI.updateTextBox, "Error while trying to receive an answer.");
+                    continue;
+                }
+  
+            }
+        }
+
+
+        /*
+         * Deleting disconnected clients from List<Player> players, while preventing 
+         * the error: InvalidOperationException. Collection was modified; enumeration operation may not execute.
+         */
+        private void handleDisconnects()
+        {
+            List<Player> notConnected = new List<Player>();
+
+            //Find players that are no longer connected.  Add them to the notConnected list so
+            //they can be handled afterwards. 
+            foreach (Player p in players)
+            {
+                //Check if the player is still connected
+                if (!p.handlerSock.Connected)
+                {
+                    notConnected.Add(p);
+                    continue;
                 }
             }
+
+            foreach (Player nc in notConnected)
+            {
+                players.Remove(nc);
+                serverGUI.Invoke(serverGUI.updateTextBox, nc.userName + " has disconnected.");
+            }
+            serverGUI.Invoke(serverGUI.updatePlayerBox);
         }
 
 
@@ -177,16 +224,18 @@ namespace Game_Server.Networking
         private void ReceivedAnswer(IAsyncResult result)
         {
             Socket clientSocket = result.AsyncState as Socket;
-            
             try
             {
                 int bufferSize = clientSocket.EndReceive(result);
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
+                recvBuf = new byte[1024]; //clear the buffer for next time
+
+                handleDisconnects();
 
                 foreach (Player p in players)
                 {
-                    if (p.handlerSock == clientSocket) //Find the client that sent the answer
+                    if (p.handlerSock == clientSocket && p.handlerSock.Connected) //Find the client that sent the answer
                     {
                         p.answer = Encoding.UTF8.GetString(packet);
                         serverGUI.Invoke(serverGUI.updateTextBox, p.userName + " selected answer: " + p.answer);
@@ -202,19 +251,15 @@ namespace Game_Server.Networking
                             send(p.handlerSock, "You answered incorrectly :(" + Environment.NewLine +
                                                 "Correct answer: " + GameMaster.updatedCorrectAnswer);
                         }
+                        serverGUI.Invoke(serverGUI.updatePlayerBox);
+                        break;
                     }
                 }
             }
             catch
             {
-                if (clientSocket.Connected)
-                {
-                    serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
-                }
+                serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
             }
-
-            recvBuf = new byte[1024]; //clear the buffer
-            
         }
 
 
@@ -227,24 +272,21 @@ namespace Game_Server.Networking
          */
         private void AcceptedCallback(IAsyncResult result)
         {
-            serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
             Socket clientSocket = listener.EndAccept(result);
-
             Player newPlayer = new Player();
             newPlayer.handlerSock = clientSocket;
             players.Add(newPlayer);
-
+            serverGUI.Invoke(serverGUI.updateTextBox, "A client has connected");
             send(clientSocket, "Welcome to the server!");
-            recvBuf = new byte[1024]; //clear the buffer
+
+            
+            //recvBuf = new byte[1024]; //clear the buffer
             if (clientSocket.Connected)
             {
                 clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
             }
-            else
-            {
-                serverGUI.Invoke(serverGUI.updateTextBox, "A client has disconnected");
-            }
-            Accept();
+
+            Accept(); //Begin accepting again.
         }
 
 
@@ -263,18 +305,21 @@ namespace Game_Server.Networking
                 int bufferSize = clientSocket.EndReceive(result);
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
+                recvBuf = new byte[1024]; //clear the buffer
+                handleDisconnects();
 
                 //Set the client's username
                 foreach (Player p in players)
                 {
-                    if ( p.handlerSock == clientSocket && p.userName == null )
+                    if ( p.handlerSock == clientSocket && p.userName == null && p.handlerSock.Connected )
                     {
                         p.userName = Encoding.UTF8.GetString(packet);
+                        p.score = 0;
+                        break;
                     }
                 }
-
                 serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.");
-
+                serverGUI.Invoke(serverGUI.updatePlayerBox);
             }
             catch
             {
@@ -282,14 +327,8 @@ namespace Game_Server.Networking
                 {
                     serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
                 }
-                else
-                {
-                    serverGUI.Invoke(serverGUI.updateTextBox, "A client has disconnected.");
-                }
-                return;
             }
 
-            recvBuf = new byte[1024]; //clear the buffer
         }
 
 
@@ -306,11 +345,7 @@ namespace Game_Server.Networking
             try
             {
                 Socket client = result.AsyncState as Socket;
-
-                // Complete sending the data to the remote device.
-                int bytesSent = client.EndSend(result);
-                //serverGUI.Invoke(serverGUI.updateTextBox, "Sent message to client");
-            
+                client.EndSend(result);           
             }
             catch (Exception e) 
             {

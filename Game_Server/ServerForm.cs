@@ -27,7 +27,9 @@ namespace Game_Server
         private static ServerSocket serverSock;
         public delegate void updateChatBoxDelegate(String textBoxString);
         public updateChatBoxDelegate updateTextBox;
-        private delegate void LabelWriteDelegate(string value);
+        public delegate void updatePlayerBoxDelegate();
+        public updatePlayerBoxDelegate updatePlayerBox;
+        private delegate void LabelWriteDelegate(string value); //Used in game thread.
         private const int MAXQUESTIONS = 3; //using 3 for testing, should be 10 for final submission.
 
         public ServerForm()
@@ -36,6 +38,7 @@ namespace Game_Server
             serverSock = new ServerSocket();
             serverSock.setForm(this); //Sending a reference of the form to the ServerSocket
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
+            updatePlayerBox = new updatePlayerBoxDelegate(setPlayerBox);
         }
 
 
@@ -121,7 +124,6 @@ namespace Game_Server
             }
 
             serverSock.broadCast(scores);
-
         }
 
 
@@ -136,7 +138,21 @@ namespace Game_Server
             }
             else
             {
-                this.srvConslTxt.AppendText(">" + str + Environment.NewLine);
+                this.srvConslTxt.AppendText(Environment.NewLine + ">" + str);
+            }
+        }
+
+
+        /*
+         * Can be called with the updatePlayerBox delegate.  Sets the textbox containing
+         * user currently connected, and their scores.
+         */
+        private void setPlayerBox()
+        {
+            this.clientListTxt.Text = "";
+            foreach (Player p in serverSock.players)
+            {
+                this.clientListTxt.AppendText(p.userName + " : " + p.score + Environment.NewLine);
             }
         }
 

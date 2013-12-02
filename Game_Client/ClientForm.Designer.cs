@@ -122,7 +122,7 @@
             this.clnConslTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.clnConslTxt.Size = new System.Drawing.Size(418, 162);
             this.clnConslTxt.TabIndex = 5;
-            this.clnConslTxt.Text = "Waiting for all players to connect...";
+            this.clnConslTxt.Text = "Welcome to the trivia game! Connect to a server to begin.";
             // 
             // timePrgBar
             // 
