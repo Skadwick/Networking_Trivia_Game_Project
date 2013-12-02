@@ -141,7 +141,7 @@ namespace Game_Client.Networking
             if (msg[0] == 'Q' && Char.IsNumber(msg[1]))
             {
                 clientGUI.Invoke(clientGUI.startQTimer);
-                clientGUI.Invoke(clientGUI.updateTextBox, Environment.NewLine + msg);
+                clientGUI.Invoke(clientGUI.updateTextBox, msg);
             }
             //If not a question, handle the message like normal.
             else
