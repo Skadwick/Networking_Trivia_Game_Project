@@ -143,6 +143,7 @@ namespace Game_Client.Networking
                 clientGUI.Invoke(clientGUI.startQTimer);
                 clientGUI.Invoke(clientGUI.updateTextBox, Environment.NewLine + msg);
             }
+            //If not a question, handle the message like normal.
             else
             {
                 clientGUI.Invoke(clientGUI.updateTextBox, msg);
@@ -150,6 +151,26 @@ namespace Game_Client.Networking
 
             buffer = new byte[1024];
             socket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, null);
+        }
+
+
+        /*
+         * Close sending and receiving from the server socket.
+         */
+        public void disconnect()
+        {
+            socket.Shutdown(SocketShutdown.Both);
+            socket.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), socket);
+        }
+
+        private void DisconnectCallback(IAsyncResult ar)
+        {
+            // Complete the disconnect request.
+            Socket client = (Socket)ar.AsyncState;
+            client.EndDisconnect(ar);
+
+            // Signal that the disconnect is complete.
+            clientGUI.Invoke(clientGUI.updateTextBox, "Disconnected from the server.");
         }
 
     }

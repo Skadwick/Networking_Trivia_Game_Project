@@ -113,7 +113,7 @@ namespace Game_Server.Networking
             }
             catch
             {
-                serverGUI.Invoke(serverGUI.updateTextBox, "Error accepting a client!");
+                serverGUI.Invoke(serverGUI.updateTextBox, "Error accepting clients!");
             }
         }
 
@@ -158,7 +158,14 @@ namespace Game_Server.Networking
             foreach (Player p in players)
             {
                 send(p.handlerSock, question);
-                p.handlerSock.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedAnswer, p.handlerSock);
+                try
+                {
+                    p.handlerSock.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedAnswer, p.handlerSock);
+                }
+                catch
+                {
+                    serverGUI.Invoke(serverGUI.updateTextBox, "Error while trying to receive an answer.");
+                }
             }
         }
 

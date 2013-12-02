@@ -81,7 +81,7 @@ namespace Game_Client
          */
         private void disconnbtn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            clientSock.disconnect();
         }
 
 
