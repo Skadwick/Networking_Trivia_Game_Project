@@ -20,6 +20,8 @@ namespace Game_Client
         public updateChatBoxDelegate updateTextBox;
         public delegate void startQuestionTimerDelegate();
         public startQuestionTimerDelegate startQTimer;
+        public delegate void sbmtBtnDelegate(Boolean set);
+        public sbmtBtnDelegate submitButton;
 
         public ClientForm()
         {
@@ -28,6 +30,7 @@ namespace Game_Client
             clientSock.setForm(this); //Sending a reference of the form to the ServerSocket
             updateTextBox = new updateChatBoxDelegate(updateChatWin);
             startQTimer = new startQuestionTimerDelegate(startTimer);
+            submitButton = new sbmtBtnDelegate(setSubmitBtn);
         }
 
 
@@ -35,7 +38,7 @@ namespace Game_Client
          * Connect to server button
          */
         private void connBtn_Click(object sender, EventArgs e)
-        {
+        {       
             if (ipAddrTxt.Text == "" || portTxt.Text == "")
                 MessageBox.Show("Please enter Server IP address and or Port Number. ");
             else if (usrNmTxt.Text == "")
@@ -45,6 +48,8 @@ namespace Game_Client
                 String clientName = usrNmTxt.Text;
                 clientSock.setUserName(clientName);
                 clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
+                disconnbtn.Enabled = true;
+                connBtn.Enabled = false;
             }
         }
 
@@ -67,7 +72,7 @@ namespace Game_Client
                 ans = "D";
 
             clientSock.send(ans);
-
+            sbmtBtn.Enabled = false;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -81,6 +86,9 @@ namespace Game_Client
          */
         private void disconnbtn_Click(object sender, EventArgs e)
         {
+            connBtn.Enabled = true;
+            sbmtBtn.Enabled = false;
+            disconnbtn.Enabled = false;
             clientSock.disconnect();
         }
 
@@ -88,7 +96,7 @@ namespace Game_Client
         /*
          * Starts the form timer.
          */
-        void startTimer()
+        private void startTimer()
         {
             //if time runs out null should be submitted
             timePrgBar.Value = 0; //reset the progress bar.
@@ -97,9 +105,19 @@ namespace Game_Client
 
 
         /*
+         * Sets the submit button's Enabled field to the passed arg.  This method
+         * is typically called by a delegate when a question is received.
+         */
+        private void setSubmitBtn(Boolean set)
+        {
+            sbmtBtn.Enabled = set;
+        }
+
+
+        /*
          * Updates the main chat/status textbox for the client form.
          */
-        void updateChatWin(String msg)
+        private void updateChatWin(String msg)
         {
             this.clnConslTxt.AppendText(Environment.NewLine + "> " + msg);
         }

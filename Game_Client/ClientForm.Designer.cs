@@ -50,9 +50,9 @@
             this.ipAddrTxt.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.ipAddrTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ipAddrTxt.ForeColor = System.Drawing.Color.BurlyWood;
-            this.ipAddrTxt.Location = new System.Drawing.Point(620, 48);
+            this.ipAddrTxt.Location = new System.Drawing.Point(598, 48);
             this.ipAddrTxt.Name = "ipAddrTxt";
-            this.ipAddrTxt.Size = new System.Drawing.Size(64, 20);
+            this.ipAddrTxt.Size = new System.Drawing.Size(90, 20);
             this.ipAddrTxt.TabIndex = 0;
             this.ipAddrTxt.Text = "127.0.0.1";
             this.ipAddrTxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -75,15 +75,17 @@
             this.usrNmTxt.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
             this.usrNmTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.usrNmTxt.ForeColor = System.Drawing.Color.BurlyWood;
-            this.usrNmTxt.Location = new System.Drawing.Point(620, 12);
+            this.usrNmTxt.Location = new System.Drawing.Point(598, 12);
             this.usrNmTxt.MaxLength = 40;
             this.usrNmTxt.Name = "usrNmTxt";
-            this.usrNmTxt.Size = new System.Drawing.Size(116, 20);
+            this.usrNmTxt.Size = new System.Drawing.Size(138, 20);
             this.usrNmTxt.TabIndex = 2;
             this.usrNmTxt.Text = "Username";
+            this.usrNmTxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // connBtn
             // 
+            this.connBtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.connBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("connBtn.BackgroundImage")));
             this.connBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.connBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -93,13 +95,15 @@
             this.connBtn.Size = new System.Drawing.Size(116, 27);
             this.connBtn.TabIndex = 3;
             this.connBtn.Text = "Connect";
-            this.connBtn.UseVisualStyleBackColor = true;
+            this.connBtn.UseVisualStyleBackColor = false;
             this.connBtn.Click += new System.EventHandler(this.connBtn_Click);
             // 
             // disconnbtn
             // 
+            this.disconnbtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.disconnbtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("disconnbtn.BackgroundImage")));
             this.disconnbtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.disconnbtn.Enabled = false;
             this.disconnbtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.disconnbtn.ForeColor = System.Drawing.Color.BurlyWood;
             this.disconnbtn.Location = new System.Drawing.Point(492, 88);
@@ -107,7 +111,7 @@
             this.disconnbtn.Size = new System.Drawing.Size(116, 27);
             this.disconnbtn.TabIndex = 4;
             this.disconnbtn.Text = "Disconnect";
-            this.disconnbtn.UseVisualStyleBackColor = true;
+            this.disconnbtn.UseVisualStyleBackColor = false;
             this.disconnbtn.Click += new System.EventHandler(this.disconnbtn_Click);
             // 
             // clnConslTxt
@@ -191,7 +195,9 @@
             // 
             // sbmtBtn
             // 
+            this.sbmtBtn.BackColor = System.Drawing.SystemColors.AppWorkspace;
             this.sbmtBtn.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("sbmtBtn.BackgroundImage")));
+            this.sbmtBtn.Enabled = false;
             this.sbmtBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.sbmtBtn.ForeColor = System.Drawing.Color.BurlyWood;
             this.sbmtBtn.Location = new System.Drawing.Point(556, 376);
@@ -199,7 +205,7 @@
             this.sbmtBtn.Size = new System.Drawing.Size(181, 76);
             this.sbmtBtn.TabIndex = 11;
             this.sbmtBtn.Text = "Submit";
-            this.sbmtBtn.UseVisualStyleBackColor = true;
+            this.sbmtBtn.UseVisualStyleBackColor = false;
             this.sbmtBtn.Click += new System.EventHandler(this.sbmtBtn_Click);
             // 
             // timer1

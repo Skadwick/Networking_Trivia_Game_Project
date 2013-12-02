@@ -141,6 +141,7 @@ namespace Game_Client.Networking
             if (msg[0] == 'Q' && Char.IsNumber(msg[1]))
             {
                 clientGUI.Invoke(clientGUI.startQTimer);
+                clientGUI.Invoke(clientGUI.submitButton, true); //Enable the submit button.
                 clientGUI.Invoke(clientGUI.updateTextBox, msg);
             }
             //If not a question, handle the message like normal.
@@ -159,8 +160,15 @@ namespace Game_Client.Networking
          */
         public void disconnect()
         {
-            socket.Shutdown(SocketShutdown.Both);
-            socket.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), socket);
+            try
+            {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.BeginDisconnect(true, new AsyncCallback(DisconnectCallback), socket);
+            }
+            catch
+            {
+                clientGUI.Invoke(clientGUI.updateTextBox, "Error trying to disconnect!");
+            }
         }
 
         private void DisconnectCallback(IAsyncResult ar)
