@@ -58,6 +58,8 @@ namespace Game_Server
             serverSock.Listen(100);
             serverSock.Accept();
             updateChatWin("Waiting for connections...");
+            //Thread disconnects = new Thread(findDisconnects);
+            //disconnects.Start(); 
         }
 
 
@@ -124,6 +126,15 @@ namespace Game_Server
             }
 
             serverSock.broadCast(scores);
+        }
+
+
+        /*
+         * 
+         */
+        private void findDisconnects()
+        {
+
         }
 
 
