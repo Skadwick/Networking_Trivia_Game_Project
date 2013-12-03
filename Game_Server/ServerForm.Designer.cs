@@ -36,6 +36,8 @@
             this.extBtn = new System.Windows.Forms.Button();
             this.chatInptTxt = new System.Windows.Forms.TextBox();
             this.sndBtn = new System.Windows.Forms.Button();
+            this.maxQNumtxt = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // clientListTxt
@@ -44,9 +46,8 @@
             this.clientListTxt.Multiline = true;
             this.clientListTxt.Name = "clientListTxt";
             this.clientListTxt.ReadOnly = true;
-            this.clientListTxt.Size = new System.Drawing.Size(121, 188);
+            this.clientListTxt.Size = new System.Drawing.Size(121, 153);
             this.clientListTxt.TabIndex = 0;
-
             // 
             // startSrvBtn
             // 
@@ -78,6 +79,7 @@
             this.srvConslTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.srvConslTxt.Size = new System.Drawing.Size(327, 281);
             this.srvConslTxt.TabIndex = 3;
+            this.srvConslTxt.TextChanged += new System.EventHandler(this.srvConslTxt_TextChanged);
             // 
             // startGameBtn
             // 
@@ -116,13 +118,31 @@
             this.sndBtn.TabIndex = 7;
             this.sndBtn.Text = "Send";
             this.sndBtn.UseVisualStyleBackColor = true;
-
+            // 
+            // maxQNumtxt
+            // 
+            this.maxQNumtxt.Location = new System.Drawing.Point(97, 242);
+            this.maxQNumtxt.Name = "maxQNumtxt";
+            this.maxQNumtxt.Size = new System.Drawing.Size(36, 20);
+            this.maxQNumtxt.TabIndex = 8;
+            this.maxQNumtxt.Text = "5";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(12, 245);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "# of Questions";
             // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(477, 336);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.maxQNumtxt);
             this.Controls.Add(this.sndBtn);
             this.Controls.Add(this.chatInptTxt);
             this.Controls.Add(this.extBtn);
@@ -148,6 +168,8 @@
         private System.Windows.Forms.Button extBtn;
         private System.Windows.Forms.TextBox chatInptTxt;
         private System.Windows.Forms.Button sndBtn;
+        private System.Windows.Forms.TextBox maxQNumtxt;
+        private System.Windows.Forms.Label label1;
 
     }
 }
