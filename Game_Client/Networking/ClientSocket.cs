@@ -26,7 +26,6 @@ namespace Game_Client.Networking
          */
         public ClientSocket()
         {
-            //socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             isConnected = false;
         }
 
