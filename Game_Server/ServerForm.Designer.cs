@@ -46,7 +46,7 @@
             this.clientListTxt.Multiline = true;
             this.clientListTxt.Name = "clientListTxt";
             this.clientListTxt.ReadOnly = true;
-            this.clientListTxt.Size = new System.Drawing.Size(121, 153);
+            this.clientListTxt.Size = new System.Drawing.Size(121, 165);
             this.clientListTxt.TabIndex = 0;
             // 
             // startSrvBtn
@@ -121,20 +121,22 @@
             // 
             // maxQNumtxt
             // 
-            this.maxQNumtxt.Location = new System.Drawing.Point(97, 242);
+            this.maxQNumtxt.Location = new System.Drawing.Point(112, 245);
+            this.maxQNumtxt.MaxLength = 2;
             this.maxQNumtxt.Name = "maxQNumtxt";
-            this.maxQNumtxt.Size = new System.Drawing.Size(36, 20);
+            this.maxQNumtxt.Size = new System.Drawing.Size(21, 20);
             this.maxQNumtxt.TabIndex = 8;
             this.maxQNumtxt.Text = "5";
+            this.maxQNumtxt.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 245);
+            this.label1.Location = new System.Drawing.Point(5, 248);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(76, 13);
+            this.label1.Size = new System.Drawing.Size(104, 13);
             this.label1.TabIndex = 9;
-            this.label1.Text = "# of Questions";
+            this.label1.Text = "Number of questions";
             // 
             // ServerForm
             // 
