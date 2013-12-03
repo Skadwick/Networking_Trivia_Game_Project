@@ -79,7 +79,6 @@
             this.srvConslTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.srvConslTxt.Size = new System.Drawing.Size(327, 281);
             this.srvConslTxt.TabIndex = 3;
-
             // 
             // startGameBtn
             // 
@@ -118,6 +117,7 @@
             this.sndBtn.TabIndex = 7;
             this.sndBtn.Text = "Send";
             this.sndBtn.UseVisualStyleBackColor = true;
+            this.sndBtn.Click += new System.EventHandler(this.sndBtn_Click);
             // 
             // maxQNumtxt
             // 

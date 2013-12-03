@@ -53,6 +53,7 @@ namespace Game_Server
             stopSrvBtn.Enabled = true;
             startSrvBtn.Enabled = false;
             startGameBtn.Enabled = true;
+            sndBtn.Enabled = true;
 
             serverSock.Bind(25001);
             serverSock.Listen(100);
@@ -74,6 +75,7 @@ namespace Game_Server
             startSrvBtn.Enabled = true;
             stopSrvBtn.Enabled = false;  
             startGameBtn.Enabled = false;
+            sndBtn.Enabled = false;
             this.Close();
         }
 
@@ -89,6 +91,17 @@ namespace Game_Server
             maxQuestions = Convert.ToInt32(maxQNumtxt.Text);
             Thread game = new Thread(sendRecvQuestions);
             game.Start();    
+        }
+
+
+        /*
+          * 
+          */
+        private void sndBtn_Click(object sender, EventArgs e)
+        {
+            serverSock.broadCast(chatInptTxt.Text);
+            updateChatWin(" (Server) " + chatInptTxt.Text);
+            chatInptTxt.Text = "";
         }
 
 
@@ -169,6 +182,8 @@ namespace Game_Server
         {
             this.Close();
         }
+
+        
 
     }
 }
