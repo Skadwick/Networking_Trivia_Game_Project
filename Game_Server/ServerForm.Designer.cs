@@ -36,6 +36,8 @@
             this.extBtn = new System.Windows.Forms.Button();
             this.chatInptTxt = new System.Windows.Forms.TextBox();
             this.sndBtn = new System.Windows.Forms.Button();
+            this.maxQNbrTxt = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // clientListTxt
@@ -44,9 +46,8 @@
             this.clientListTxt.Multiline = true;
             this.clientListTxt.Name = "clientListTxt";
             this.clientListTxt.ReadOnly = true;
-            this.clientListTxt.Size = new System.Drawing.Size(121, 188);
+            this.clientListTxt.Size = new System.Drawing.Size(121, 162);
             this.clientListTxt.TabIndex = 0;
-
             // 
             // startSrvBtn
             // 
@@ -116,13 +117,32 @@
             this.sndBtn.TabIndex = 7;
             this.sndBtn.Text = "Send";
             this.sndBtn.UseVisualStyleBackColor = true;
-
+            // 
+            // maxQNbrTxt
+            // 
+            this.maxQNbrTxt.Location = new System.Drawing.Point(108, 242);
+            this.maxQNbrTxt.Name = "maxQNbrTxt";
+            this.maxQNbrTxt.Size = new System.Drawing.Size(25, 20);
+            this.maxQNbrTxt.TabIndex = 8;
+            this.maxQNbrTxt.Text = "5";
+            this.maxQNbrTxt.TextChanged += new System.EventHandler(this.maxQNbrTxt_TextChanged);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(16, 244);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(86, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "No. of Questions";
             // 
             // ServerForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(477, 336);
+            this.ClientSize = new System.Drawing.Size(477, 332);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.maxQNbrTxt);
             this.Controls.Add(this.sndBtn);
             this.Controls.Add(this.chatInptTxt);
             this.Controls.Add(this.extBtn);
@@ -148,6 +168,8 @@
         private System.Windows.Forms.Button extBtn;
         private System.Windows.Forms.TextBox chatInptTxt;
         private System.Windows.Forms.Button sndBtn;
+        private System.Windows.Forms.TextBox maxQNbrTxt;
+        private System.Windows.Forms.Label label1;
 
     }
 }

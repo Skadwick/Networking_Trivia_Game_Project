@@ -176,5 +176,10 @@ namespace Game_Server
             this.Close();
         }
 
+        private void maxQNbrTxt_TextChanged(object sender, EventArgs e)
+        {
+           // MAXQUESTIONS = Convert.ToInt32(maxQNbrTxt.Text);
+        }
+
     }
 }

@@ -229,27 +229,30 @@ namespace Game_Server.Networking
                 int bufferSize = clientSocket.EndReceive(result);
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
-                recvBuf = new byte[1024]; //clear the buffer for next time
+              //recvBuf = new byte[1024]; //clear the buffer for next time
 
                 handleDisconnects();
 
                 foreach (Player p in players)
                 {
-                    if (p.handlerSock == clientSocket && p.handlerSock.Connected) //Find the client that sent the answer
+                    if (p.handlerSock == clientSocket) //Find the client that sent the answer
                     {
                         p.answer = Encoding.UTF8.GetString(packet);
                         serverGUI.Invoke(serverGUI.updateTextBox, p.userName + " selected answer: " + p.answer);
 
-                        //Check their response, and update their score.  
-                        if (p.answer == GameMaster.updatedCorrectAnswer)
+                        //Check their response, and update their score. 
+                        if (p.handlerSock.Connected)
                         {
-                            p.score++;
-                            send(p.handlerSock, "You answered correctly!");
-                        }
-                        else
-                        {
-                            send(p.handlerSock, "You answered incorrectly :(" + Environment.NewLine +
-                                                "Correct answer: " + GameMaster.updatedCorrectAnswer);
+                            if (p.answer == GameMaster.updatedCorrectAnswer)
+                            {
+                                p.score++;
+                                send(p.handlerSock, "You answered correctly!");
+                            }
+                            else
+                            {
+                                send(p.handlerSock, "You answered incorrectly :(" + Environment.NewLine +
+                                                    "Correct answer: " + GameMaster.updatedCorrectAnswer);
+                            }
                         }
                         serverGUI.Invoke(serverGUI.updatePlayerBox);
                         break;

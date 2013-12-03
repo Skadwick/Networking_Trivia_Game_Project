@@ -41,7 +41,7 @@ namespace Game_Client
         {       
             if (ipAddrTxt.Text == "" || portTxt.Text == "")
                 MessageBox.Show("Please enter Server IP address and or Port Number. ");
-            else if (usrNmTxt.Text == "")
+            else if (usrNmTxt.Text == "" || usrNmTxt.Text =="Username")
                 MessageBox.Show("Please enter a User Name. ");
             else
             {
@@ -50,6 +50,10 @@ namespace Game_Client
                 clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
                 disconnbtn.Enabled = true;
                 connBtn.Enabled = false;
+
+                portTxt.ReadOnly = true;
+                usrNmTxt.ReadOnly = true;
+                ipAddrTxt.ReadOnly = true;
             }
         }
 
@@ -90,6 +94,7 @@ namespace Game_Client
             sbmtBtn.Enabled = false;
             disconnbtn.Enabled = false;
             clientSock.disconnect();
+            this.Close();
         }
 
 

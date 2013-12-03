@@ -33,7 +33,7 @@ namespace Game_Server.Game
             //Randomly select a question.  Do this until the randomized question has not yet been asked.
             do
             {
-                rand = rnd.Next(0, numberOfQuestions);
+              rand = rnd.Next(0, numberOfQuestions);
             } while (boolArray[rand] == true);
 
             boolArray[rand] = true;
