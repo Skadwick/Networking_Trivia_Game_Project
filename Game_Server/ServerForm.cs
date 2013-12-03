@@ -127,6 +127,7 @@ namespace Game_Server
             }
 
             serverSock.broadCast(scores);
+            this.updateChatWin(scores);
         }
 
 
