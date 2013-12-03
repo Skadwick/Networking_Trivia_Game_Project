@@ -13,7 +13,9 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using Game_Server.Game;
+
 
 namespace Game_Server.Networking
 {
@@ -46,6 +48,8 @@ namespace Game_Server.Networking
 
         public List<Player> players = new List<Player>();
 
+        private Thread killDisconnects;
+  
 
         /*
          * Create a socket to listen for connections.
@@ -53,6 +57,8 @@ namespace Game_Server.Networking
         public ServerSocket()
         {
             listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            killDisconnects = new Thread(handleDisconnects);
+            killDisconnects.Start();
         }
 
 
@@ -141,7 +147,7 @@ namespace Game_Server.Networking
          */
         public void broadCast(string msg)
         {
-            handleDisconnects();
+            //handleDisconnects();
             foreach (Player p in players)
             {
                 //Check if the player is still connected
@@ -164,7 +170,7 @@ namespace Game_Server.Networking
          */
         public void sendNextQuestion(String question)
         {
-            handleDisconnects();
+            //handleDisconnects();
             foreach (Player p in players)
             {
                 if (p.handlerSock.Connected)
@@ -195,26 +201,32 @@ namespace Game_Server.Networking
          */
         private void handleDisconnects()
         {
-            List<Player> notConnected = new List<Player>();
-
-            //Find players that are no longer connected.  Add them to the notConnected list so
-            //they can be handled afterwards. 
-            foreach (Player p in players)
+            while (true)
             {
-                //Check if the player is still connected
-                if (!p.handlerSock.Connected)
+                List<Player> notConnected = new List<Player>();
+
+                //Find players that are no longer connected.  Add them to the notConnected list so
+                //they can be handled afterwards. 
+                foreach (Player p in players)
                 {
-                    notConnected.Add(p);
-                    continue;
-                }
-            }
+                    //Check if the player is still connected
+                    bool chk1 = p.handlerSock.Poll(1000, SelectMode.SelectRead);
+                    bool chk2 = (p.handlerSock.Available == 0);
+                    if (chk1 & chk2)
+                    {
+                        notConnected.Add(p);
+                    }
 
-            foreach (Player nc in notConnected)
-            {
-                players.Remove(nc);
-                serverGUI.Invoke(serverGUI.updateTextBox, "\n"+ nc.userName + " has disconnected.\n"+"\n");
+                }
+
+                foreach (Player nc in notConnected)
+                {
+                    players.Remove(nc);
+                    serverGUI.Invoke(serverGUI.updateTextBox, "\n" + nc.userName + " has disconnected.\n" + "\n");
+                }
+                serverGUI.Invoke(serverGUI.updatePlayerBox);
+                Thread.Sleep(1000);
             }
-            serverGUI.Invoke(serverGUI.updatePlayerBox);
         }
 
 
@@ -232,7 +244,7 @@ namespace Game_Server.Networking
                 Array.Copy(recvBuf, packet, packet.Length);
                 //recvBuf = new byte[1024]; //clear the buffer for next time
 
-                handleDisconnects();
+                //handleDisconnects();
 
                 foreach (Player p in players)
                 {
@@ -280,7 +292,6 @@ namespace Game_Server.Networking
             serverGUI.Invoke(serverGUI.updateTextBox, "\n "+"A client has connected"+"\n");
             send(clientSocket, "Welcome to the server!");
 
-            
             //recvBuf = new byte[1024]; //clear the buffer
             if (clientSocket.Connected)
             {
@@ -307,7 +318,7 @@ namespace Game_Server.Networking
                 byte[] packet = new byte[bufferSize];
                 Array.Copy(recvBuf, packet, packet.Length);
                 recvBuf = new byte[1024]; //clear the buffer
-                handleDisconnects();
+                //handleDisconnects();
 
                 //Set the client's username
                 foreach (Player p in players)

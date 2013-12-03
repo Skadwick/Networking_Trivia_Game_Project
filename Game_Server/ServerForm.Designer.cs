@@ -79,7 +79,7 @@
             this.srvConslTxt.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.srvConslTxt.Size = new System.Drawing.Size(327, 281);
             this.srvConslTxt.TabIndex = 3;
-            this.srvConslTxt.TextChanged += new System.EventHandler(this.srvConslTxt_TextChanged);
+
             // 
             // startGameBtn
             // 

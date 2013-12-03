@@ -30,7 +30,7 @@ namespace Game_Server
         public delegate void updatePlayerBoxDelegate();
         public updatePlayerBoxDelegate updatePlayerBox;
         private delegate void LabelWriteDelegate(string value); //Used in game thread.
-        private int MAXQUESTIONS = 0; //using 3 for testing, should be 10 for final submission.
+        private int maxQuestions = 0; //using 3 for testing, should be 10 for final submission.
 
         public ServerForm()
         {
@@ -74,6 +74,7 @@ namespace Game_Server
             startSrvBtn.Enabled = true;
             stopSrvBtn.Enabled = false;  
             startGameBtn.Enabled = false;
+            this.Close();
         }
 
 
@@ -85,7 +86,7 @@ namespace Game_Server
         private void startGameBtn_Click(object sender, EventArgs e)
         {
             startGameBtn.Enabled = false;
-            MAXQUESTIONS = Convert.ToInt32(maxQNumtxt.Text);
+            maxQuestions = Convert.ToInt32(maxQNumtxt.Text);
             Thread game = new Thread(sendRecvQuestions);
             game.Start();    
         }
@@ -104,7 +105,7 @@ namespace Game_Server
         {
             int questionNum = 1;
 
-            while (questionNum <= MAXQUESTIONS)
+            while (questionNum <= maxQuestions)
             {
 
                 //Send question
@@ -128,15 +129,6 @@ namespace Game_Server
 
             serverSock.broadCast(scores);
             this.updateChatWin(scores);
-        }
-
-
-        /*
-         * 
-         */
-        private void findDisconnects()
-        {
-
         }
 
 
@@ -177,13 +169,6 @@ namespace Game_Server
         {
             this.Close();
         }
-
-        private void srvConslTxt_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-    
 
     }
 }
