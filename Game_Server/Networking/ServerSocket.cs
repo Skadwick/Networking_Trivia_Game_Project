@@ -216,15 +216,19 @@ namespace Game_Server.Networking
                     {
                         notConnected.Add(p);
                     }
-
                 }
 
                 foreach (Player nc in notConnected)
                 {
                     players.Remove(nc);
-                    serverGUI.Invoke(serverGUI.updateTextBox, "\n" + nc.userName + " has disconnected.\n" + "\n");
+                    broadCast(nc.userName + " has disconnected.");
+                    serverGUI.Invoke(serverGUI.updateTextBox, nc.userName + " has disconnected.");
                 }
-                serverGUI.Invoke(serverGUI.updatePlayerBox);
+                try
+                {
+                    serverGUI.Invoke(serverGUI.updatePlayerBox);
+                }
+                catch { }
                 Thread.Sleep(1000);
             }
         }
@@ -271,7 +275,10 @@ namespace Game_Server.Networking
             }
             catch
             {
-                serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
+                if (clientSocket.Connected)
+                {
+                    serverGUI.Invoke(serverGUI.updateTextBox, "Error receiving data from client.");
+                }
             }
         }
 
@@ -289,10 +296,9 @@ namespace Game_Server.Networking
             Player newPlayer = new Player();
             newPlayer.handlerSock = clientSocket;
             players.Add(newPlayer);
-            serverGUI.Invoke(serverGUI.updateTextBox, "\n "+"A client has connected"+"\n");
-            send(clientSocket, "Welcome to the server!");
 
-            //recvBuf = new byte[1024]; //clear the buffer
+            //send(clientSocket, "Welcome to the server!");
+
             if (clientSocket.Connected)
             {
                 clientSocket.BeginReceive(recvBuf, 0, recvBuf.Length, SocketFlags.None, ReceivedCallback, clientSocket);
@@ -330,7 +336,8 @@ namespace Game_Server.Networking
                         break;
                     }
                 }
-                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has joined the game.\n");
+                serverGUI.Invoke(serverGUI.updateTextBox, Encoding.UTF8.GetString(packet) + " has connected.");
+                broadCast(Encoding.UTF8.GetString(packet) + " has connected.");
                 serverGUI.Invoke(serverGUI.updatePlayerBox);
             }
             catch
