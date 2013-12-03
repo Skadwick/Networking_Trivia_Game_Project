@@ -26,7 +26,7 @@ namespace Game_Client.Networking
          */
         public ClientSocket()
         {
-            socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            //socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             isConnected = false;
         }
 
@@ -70,6 +70,7 @@ namespace Game_Client.Networking
             clientGUI.Invoke(clientGUI.updateTextBox, "Attempting to connect...");
             try
             {
+                socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 socket.BeginConnect(new IPEndPoint(IPAddress.Parse(ipAddress), port), ConnectCallback, null);
             }
             catch
@@ -107,6 +108,7 @@ namespace Game_Client.Networking
          */
         private void ConnectCallback(IAsyncResult result)
         {
+            
             if (socket.Connected)
             {
                 clientGUI.Invoke(clientGUI.updateTextBox, "Connected to server.");
