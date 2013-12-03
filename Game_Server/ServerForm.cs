@@ -89,6 +89,11 @@ namespace Game_Server
         {
             startGameBtn.Enabled = false;
             maxQuestions = Convert.ToInt32(maxQNumtxt.Text);
+            if (maxQuestions > 30 || maxQuestions < 0)
+            {
+                maxQuestions = 30;
+                maxQNumtxt.Text = "30";
+            }
             Thread game = new Thread(sendRecvQuestions);
             game.Start();    
         }
