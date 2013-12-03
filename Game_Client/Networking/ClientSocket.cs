@@ -14,6 +14,7 @@ namespace Game_Client.Networking
         private byte[] buffer;
         ClientForm clientGUI;
         string username;
+        public Boolean isConnected;
 
 
         /*
@@ -26,6 +27,7 @@ namespace Game_Client.Networking
         public ClientSocket()
         {
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            isConnected = false;
         }
 
 
@@ -108,6 +110,7 @@ namespace Game_Client.Networking
             if (socket.Connected)
             {
                 clientGUI.Invoke(clientGUI.updateTextBox, "Connected to server.");
+                isConnected = true;
                 socket.EndConnect(result);
                 send(username);
                 buffer = new byte[1024];

@@ -175,7 +175,6 @@ namespace Game_Server.Networking
             {
                 if (p.handlerSock.Connected)
                 {
-                    //recvBuf = new byte[1024];
                     send(p.handlerSock, question);
                     try
                     {
@@ -186,11 +185,6 @@ namespace Game_Server.Networking
                         serverGUI.Invoke(serverGUI.updateTextBox, "Error while trying to receive an answer.");
                     }
                 }
-                else
-                {
-                    continue;
-                }
-  
             }
         }
 

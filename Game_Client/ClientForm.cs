@@ -38,7 +38,12 @@ namespace Game_Client
          * Connect to server button
          */
         private void connBtn_Click(object sender, EventArgs e)
-        {       
+        {
+            if (clientSock.isConnected)
+            {
+                MessageBox.Show("You are already connected.");
+                return;
+            }
             if (ipAddrTxt.Text == "" || portTxt.Text == "")
                 MessageBox.Show("Please enter Server IP address and or Port Number. ");
             else if (usrNmTxt.Text == ""|| usrNmTxt.Text=="Username")
@@ -49,7 +54,6 @@ namespace Game_Client
                 clientSock.setUserName(clientName);
                 clientSock.Connect(ipAddrTxt.Text, Convert.ToInt32(portTxt.Text));
                 disconnbtn.Enabled = true;
-                connBtn.Enabled = false;
                 ipAddrTxt.ReadOnly = true;
                 portTxt.ReadOnly = true;
                 usrNmTxt.ReadOnly = true;
